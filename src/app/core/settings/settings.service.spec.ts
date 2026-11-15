@@ -122,5 +122,4 @@ describe('SettingsService', () => {
     await restored.load();
     expect(restored.settings()).toEqual(service.settings());
   });
-
 });
