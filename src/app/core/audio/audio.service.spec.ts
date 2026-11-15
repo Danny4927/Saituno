@@ -70,7 +70,12 @@ describe('AudioService', () => {
       getTracks: () => [audioTrack]
     });
     vi.stubGlobal('navigator', { mediaDevices: { getUserMedia } });
-    vi.stubGlobal('document', { baseURI: 'https://saituno.test/' });
+    vi.stubGlobal('document', {
+      baseURI: 'https://saituno.test/',
+      visibilityState: 'visible',
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    });
     vi.stubGlobal('AudioContext', FakeAudioContext);
     vi.stubGlobal('AudioWorkletNode', FakeAudioWorkletNode);
 
