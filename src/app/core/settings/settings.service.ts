@@ -28,6 +28,7 @@ export class SettingsService {
     if (typeof window === 'undefined') return;
     try {
       const value = window.localStorage.getItem(STORAGE_KEY);
+      console.info('[settings-debug] constructor storage', value);
       if (value) this.restore(value);
     } catch {
       // The app can still run with in-memory defaults when storage is blocked.
@@ -62,11 +63,12 @@ export class SettingsService {
       const parsed: unknown = JSON.parse(value);
       if (!parsed || typeof parsed !== 'object') return;
       const candidate = parsed as Partial<AppSettings>;
+      console.info('[settings-debug] restore candidate', candidate);
       const instrument = getInstrument(candidate.instrumentId ?? '');
-      if (!instrument) return;
+      if (!instrument) { console.info('[settings-debug] invalid instrument'); return; }
 
       const tuning = getTuning(instrument.id, candidate.tuningId ?? '');
-      if (!tuning) return;
+      if (!tuning) { console.info('[settings-debug] invalid tuning', candidate.instrumentId, candidate.tuningId); return; }
 
       const selectionMode = candidate.selectionMode === 'manual' ? 'manual' : 'auto';
       const manualStringId =
