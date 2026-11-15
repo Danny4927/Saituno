@@ -37,6 +37,8 @@ Useful commands:
 | `npm run build:production` | Production web build |
 | `npm run build:pages` | Production build for the GitHub Pages repository path |
 | `npm run build:native` | Production build with a root base path for Capacitor |
+| `npm run build:native:android` | Build web assets and synchronize Capacitor Android |
+| `npm run build:native:ios` | Build web assets and synchronize Capacitor iOS |
 | `npm run lint` | Check source formatting |
 | `npm test` | Run unit tests with Vitest |
 | `npm run test:e2e` | Run Playwright browser tests |
@@ -54,7 +56,18 @@ npm run native:sync
 
 Open the Android project in Android Studio with `npx cap open android`. On macOS with Xcode installed, open the iOS project with `npx cap open ios`.
 
-Android builds require the Android SDK and a supported JDK/Gradle environment. iOS builds require macOS and Xcode. Native signing credentials must never be committed to this repository.
+Android builds require the Android SDK and JDK 21. iOS builds require macOS and Xcode. Native signing credentials must never be committed to this repository. The `Native platform builds` workflow compiles an Android debug APK and an iOS Simulator build for pull requests and pushes to `main`.
+
+## Releases
+
+Version tags use the `vMAJOR.MINOR.PATCH` format and must match `package.json` (currently `v0.1.0`). Pushing a matching tag starts the Android release workflow. Before creating a public release, configure these repository or environment secrets:
+
+- `ANDROID_KEYSTORE_BASE64`: base64-encoded release keystore (`base64 -w 0 release.jks`)
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
+
+The workflow signs and verifies the APK, generates a SHA-256 checksum and attaches both files to the GitHub Release. Never use a debug keystore for public releases. Without these secrets the release job intentionally fails instead of publishing an unsigned APK. iOS is compiled for the Simulator in CI; App Store/TestFlight distribution still requires Apple signing certificates, provisioning and account credentials, which are not stored in this repository.
 
 ## PWA
 
