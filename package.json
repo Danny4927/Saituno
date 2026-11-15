@@ -21,7 +21,9 @@
     "test:e2e": "playwright test",
     "native:add:android": "cap add android",
     "native:add:ios": "cap add ios",
-    "native:sync": "cap sync"
+    "native:sync": "cap sync",
+    "build:native:android": "npm run build:native && npx cap sync android",
+    "build:native:ios": "npm run build:native && npx cap sync ios"
   },
   "dependencies": {
     "@angular/common": "22.2.6",
