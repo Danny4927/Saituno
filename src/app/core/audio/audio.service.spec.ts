@@ -161,5 +161,4 @@ describe('AudioService', () => {
     expect(service.errorMessage()).toContain('Hintergrund');
     expect(FakeAudioContext.latest!.state).toBe('closed');
   });
-
 });
