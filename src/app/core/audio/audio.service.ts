@@ -21,6 +21,19 @@ export class AudioService implements OnDestroy {
   private startInProgress = false;
 
   async start(): Promise<void> {
+    if (this._status() === 'suspended' && this.audioContext) {
+      try {
+        await this.audioContext.resume();
+        if (this.audioContext.state === 'running') {
+          this._status.set('listening');
+          this._errorMessage.set(null);
+          return;
+        }
+      } catch {
+        // Fall through and rebuild the audio graph below.
+      }
+      await this.releaseAudioResources();
+    }
     if (this._status() === 'listening' || this.startInProgress) return;
 
     if (

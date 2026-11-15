@@ -2,6 +2,7 @@ export type AudioStatus =
   | 'idle'
   | 'requesting'
   | 'listening'
+  | 'suspended'
   | 'unsupported'
   | 'permission-denied'
   | 'no-input'

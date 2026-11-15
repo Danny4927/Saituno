@@ -269,6 +269,8 @@ export class HomePage {
     if (this.status() === 'requesting') return 'Bitte erlaube den Mikrofonzugriff.';
     if (this.status() === 'unsupported')
       return 'Dein Browser unterstützt die benötigte Audiofunktion nicht.';
+    if (this.status() === 'suspended')
+      return this.audio.errorMessage() ?? 'Die Audioverarbeitung wurde pausiert.';
     if (
       this.status() === 'permission-denied' ||
       this.status() === 'no-input' ||
