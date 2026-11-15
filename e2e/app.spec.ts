@@ -83,7 +83,14 @@ test('persists instrument, tuning and string selection after reload', async ({ p
   await page.getByTestId('string-B0').click();
   await expect
     .poll(() => page.evaluate(() => localStorage.getItem('saituno.settings.v1')))
-    .toContain('"instrumentId":"bass"');
+    .toBe(
+      JSON.stringify({
+        instrumentId: 'bass',
+        tuningId: 'bass-5-standard',
+        selectionMode: 'manual',
+        manualStringId: 'B0'
+      })
+    );
 
   await page.reload();
 
