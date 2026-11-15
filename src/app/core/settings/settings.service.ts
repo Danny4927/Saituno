@@ -24,6 +24,16 @@ export class SettingsService {
   private readonly _settings = signal<AppSettings>(DEFAULT_SETTINGS);
   readonly settings = this._settings.asReadonly();
 
+  constructor() {
+    if (typeof window === 'undefined') return;
+    try {
+      const value = window.localStorage.getItem(STORAGE_KEY);
+      if (value) this.restore(value);
+    } catch {
+      // The app can still run with in-memory defaults when storage is blocked.
+    }
+  }
+
   async load(): Promise<void> {
     let value: string | null = null;
 
@@ -45,33 +55,37 @@ export class SettingsService {
 
     if (!value) return;
 
-    try {
-      const parsed: unknown = JSON.parse(value);
-      if (!parsed || typeof parsed !== 'object') return;
-      const candidate = parsed as Partial<AppSettings>;
-      const instrument = getInstrument(candidate.instrumentId ?? '');
-      if (!instrument) return;
+    this.restore(value);
+  }
 
-      const tuning = getTuning(instrument.id, candidate.tuningId ?? '');
-      if (!tuning) return;
-
-      const selectionMode = candidate.selectionMode === 'manual' ? 'manual' : 'auto';
-      const manualStringId =
-        typeof candidate.manualStringId === 'string' &&
-        tuning.strings.some((string) => string.id === candidate.manualStringId)
-          ? candidate.manualStringId
-          : (tuning.strings[0]?.id ?? null);
-
-      this._settings.set({
-        instrumentId: instrument.id,
-        tuningId: tuning.id,
-        selectionMode,
-        manualStringId
-      });
-    } catch {
-      // Ignore corrupt values and keep the safe defaults.
-      this._settings.set(DEFAULT_SETTINGS);
-    }
+  private restore(value: string): void {
+      try {
+        const parsed: unknown = JSON.parse(value);
+        if (!parsed || typeof parsed !== 'object') return;
+        const candidate = parsed as Partial<AppSettings>;
+        const instrument = getInstrument(candidate.instrumentId ?? '');
+        if (!instrument) return;
+  
+        const tuning = getTuning(instrument.id, candidate.tuningId ?? '');
+        if (!tuning) return;
+  
+        const selectionMode = candidate.selectionMode === 'manual' ? 'manual' : 'auto';
+        const manualStringId =
+          typeof candidate.manualStringId === 'string' &&
+          tuning.strings.some((string) => string.id === candidate.manualStringId)
+            ? candidate.manualStringId
+            : (tuning.strings[0]?.id ?? null);
+  
+        this._settings.set({
+          instrumentId: instrument.id,
+          tuningId: tuning.id,
+          selectionMode,
+          manualStringId
+        });
+      } catch {
+        // Ignore corrupt values and keep the safe defaults.
+        this._settings.set(DEFAULT_SETTINGS);
+      }
   }
 
   async update(partial: Partial<AppSettings>): Promise<void> {
