@@ -76,6 +76,7 @@ test('receives microphone samples through the AudioWorklet', async ({ page, cont
 
 
 test('persists instrument, tuning and string selection after reload', async ({ page }) => {
+  page.on('console', (message) => console.log('[browser]', message.text()));
   await page.goto('/');
   await page.getByTestId('instrument-select').selectOption('bass');
   await page.getByTestId('tuning-select').selectOption('bass-5-standard');
