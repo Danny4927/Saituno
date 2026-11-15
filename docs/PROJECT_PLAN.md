@@ -3,7 +3,7 @@
 **Produkt:** Saituno  
 **Untertitel:** Open Source Instrument Tuner  
 **Zielplattformen:** Web, Android und iOS  
-**Projektstatus:** Phase 1 abgeschlossen; Phase 2 in Umsetzung
+**Projektstatus:** Phase 1 und Phase 2 gemerged; Phase 3 Tuner-Oberfläche implementiert
 
 ---
 
@@ -453,14 +453,16 @@ Zusätzlich sind reale Instrumente und Mikrofone erforderlich. Mindestens eine G
 
 ### Phase 3 – Tuner-Oberfläche
 
-- Tuner-Ansicht erstellen.
-- Tonname und Frequenz anzeigen.
-- Cent-Skala implementieren.
-- Zu-tief-/Gestimmt-/Zu-hoch-Zustände.
-- Automatische und manuelle Saitenauswahl.
-- Fehler- und Berechtigungszustände.
+- [x] Tuner-Ansicht mit responsivem Desktop-/Mobile-Layout erstellen.
+- [x] Tonname, Oktave und gemessene Frequenz anzeigen.
+- [x] Cent-Skala mit beweglichem Zeiger implementieren.
+- [x] Zu-tief-/Gestimmt-/Zu-hoch-Zustände mit ±3-Cent-Toleranz.
+- [x] Automatische und manuelle Saitenauswahl für Gitarre E Standard.
+- [x] Fehler- und Berechtigungszustände aus AudioService integrieren.
+- [x] Domain-Helfer für Zieltonabweichung und automatische Gitarrensaitenerkennung ergänzen.
+- [x] Vitest- und Playwright-Tests für Auswahl und Oberfläche ergänzen.
 
-**Abnahme:** Ein Instrument kann über eine verständliche Oberfläche gestimmt werden.
+**Abnahme:** Phase 3 UI-Funktionen sind implementiert. Vollständige visuelle und funktionale Abnahme erfolgt mit erfolgreicher CI und Review des PR. Die unterstützten Instrumente und alternativen Stimmungen folgen in Phase 4.
 
 ### Phase 4 – Instrumente und Stimmungen
 
@@ -602,7 +604,7 @@ Der Name ist eine Produktentscheidung für die Entwicklung, keine bestätigte ma
 
 ## 18. Nächster Umsetzungsschritt
 
-Phase 1 ist abgeschlossen. Phase 2 hat den Audio-Prototyp mit Mikrofonzugriff, AudioWorklet, YIN, Frequenz-/Cent-Berechnung und automatisierten synthetischen Tests umgesetzt. Vor dem Abschluss von Phase 2 stehen noch reale Gerätetests und die Messung von Genauigkeit und Latenz aus. Danach folgt Phase 3 mit dem Ausbau der eigentlichen Tuner-Oberfläche.
+Phase 1 und Phase 2 sind gemerged. Phase 3 implementiert die eigentliche Tuner-Oberfläche mit Cent-Anzeige, Stimmstatus sowie automatischer und manueller Saitenauswahl für Gitarre E Standard. Als Nächstes folgt Phase 4 mit datengetriebenen Instrument- und Stimmungskonfigurationen. Reale Gerätetests und Messungen der Audio-Genauigkeit/Latenz aus Phase 2 bleiben plattformübergreifend offen.
 
 
 ---
