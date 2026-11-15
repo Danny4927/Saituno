@@ -59,7 +59,12 @@ import {
                   (change)="selectInstrument($event)"
                 >
                   @for (instrument of instruments; track instrument.id) {
-                    <option [value]="instrument.id" [selected]="instrument.id === selectedInstrumentId()">{{ instrument.name }}</option>
+                    <option
+                      [value]="instrument.id"
+                      [selected]="instrument.id === selectedInstrumentId()"
+                    >
+                      {{ instrument.name }}
+                    </option>
                   }
                 </select>
               </label>
@@ -72,7 +77,9 @@ import {
                   (change)="selectTuning($event)"
                 >
                   @for (tuning of availableTunings(); track tuning.id) {
-                    <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">{{ tuning.name }}</option>
+                    <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">
+                      {{ tuning.name }}
+                    </option>
                   }
                 </select>
               </label>
