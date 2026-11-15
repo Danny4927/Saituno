@@ -1,9 +1,9 @@
 const NOTE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
 
-export function frequencyToPitch(frequency: number, referenceFrequency = 440): Omit<
-  import('./audio.models').PitchMeasurement,
-  'confidence' | 'rms'
-> | null {
+export function frequencyToPitch(
+  frequency: number,
+  referenceFrequency = 440
+): Omit<import('./audio.models').PitchMeasurement, 'confidence' | 'rms'> | null {
   if (
     !Number.isFinite(frequency) ||
     frequency <= 0 ||
