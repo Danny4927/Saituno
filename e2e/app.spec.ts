@@ -11,3 +11,18 @@ test('loads the Saituno audio prototype in its idle state', async ({ page }) => 
     animations: 'disabled'
   });
 });
+
+test('shows a helpful message when microphone permission is denied', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+      configurable: true,
+      value: async () => {
+        throw new DOMException('Denied', 'NotAllowedError');
+      }
+    });
+  });
+
+  await page.goto('/');
+  await page.getByTestId('tuner-toggle').click();
+  await expect(page.getByRole('status')).toContainText('Mikrofonzugriff wurde verweigert');
+});
