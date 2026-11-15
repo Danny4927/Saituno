@@ -144,7 +144,9 @@ test('exposes accessible names and selected string state', async ({ page }) => {
 
 test('supports keyboard navigation through tuner controls', async ({ page }) => {
   await page.goto('/');
-  await page.keyboard.press('Tab');
+  // Firefox on Linux can be configured to skip links in the default Tab order.
+  // Start on the brand link explicitly, then verify keyboard traversal of tuner controls.
+  await page.getByRole('link', { name: 'Saituno Startseite' }).focus();
   await expect(page.getByRole('link', { name: 'Saituno Startseite' })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('combobox', { name: 'Instrument auswählen' })).toBeFocused();
