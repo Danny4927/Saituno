@@ -38,7 +38,10 @@ import {
             <div class="card-header">
               <div>
                 <p class="card-kicker">INSTRUMENT</p>
-                <h2>{{ activeInstrument().name }} <span class="tuning-name">· {{ activeTuning().name }}</span></h2>
+                <h2>
+                  {{ activeInstrument().name }}
+                  <span class="tuning-name">· {{ activeTuning().name }}</span>
+                </h2>
               </div>
               <span class="live-indicator" [class.is-live]="isListening()">
                 <span></span>{{ isListening() ? 'LIVE' : 'BEREIT' }}
@@ -48,8 +51,12 @@ import {
             <div class="configuration-row">
               <label class="configuration-field">
                 <span>Instrument</span>
-                <select aria-label="Instrument auswählen" data-testid="instrument-select"
-                  [value]="selectedInstrumentId()" (change)="selectInstrument($event)">
+                <select
+                  aria-label="Instrument auswählen"
+                  data-testid="instrument-select"
+                  [value]="selectedInstrumentId()"
+                  (change)="selectInstrument($event)"
+                >
                   @for (instrument of instruments; track instrument.id) {
                     <option [value]="instrument.id">{{ instrument.name }}</option>
                   }
@@ -57,8 +64,12 @@ import {
               </label>
               <label class="configuration-field">
                 <span>Stimmung</span>
-                <select aria-label="Stimmung auswählen" data-testid="tuning-select"
-                  [value]="selectedTuningId()" (change)="selectTuning($event)">
+                <select
+                  aria-label="Stimmung auswählen"
+                  data-testid="tuning-select"
+                  [value]="selectedTuningId()"
+                  (change)="selectTuning($event)"
+                >
                   @for (tuning of availableTunings(); track tuning.id) {
                     <option [value]="tuning.id">{{ tuning.name }}</option>
                   }
@@ -67,25 +78,49 @@ import {
             </div>
 
             <div class="mode-row" aria-label="Saitenauswahl">
-              <button type="button" class="mode-button" [class.active]="selectionMode() === 'auto'"
-                [attr.aria-pressed]="selectionMode() === 'auto'" (click)="setMode('auto')"
-                data-testid="auto-mode">AUTO</button>
-              <button type="button" class="mode-button" [class.active]="selectionMode() === 'manual'"
-                [attr.aria-pressed]="selectionMode() === 'manual'" (click)="setMode('manual')"
-                data-testid="manual-mode">MANUELL</button>
+              <button
+                type="button"
+                class="mode-button"
+                [class.active]="selectionMode() === 'auto'"
+                [attr.aria-pressed]="selectionMode() === 'auto'"
+                (click)="setMode('auto')"
+                data-testid="auto-mode"
+              >
+                AUTO
+              </button>
+              <button
+                type="button"
+                class="mode-button"
+                [class.active]="selectionMode() === 'manual'"
+                [attr.aria-pressed]="selectionMode() === 'manual'"
+                (click)="setMode('manual')"
+                data-testid="manual-mode"
+              >
+                MANUELL
+              </button>
               <span class="mode-hint">{{
-                selectionMode() === 'auto' ? 'Saite wird automatisch erkannt' : 'Saite manuell auswählen'
+                selectionMode() === 'auto'
+                  ? 'Saite wird automatisch erkannt'
+                  : 'Saite manuell auswählen'
               }}</span>
             </div>
 
             <div class="string-picker" aria-label="Saite auswählen">
               @for (string of strings(); track string.id + string.label) {
-                <button type="button" class="string-button"
+                <button
+                  type="button"
+                  class="string-button"
                   [class.selected]="activeString()?.id === string.id"
-                  [class.manual-selected]="selectionMode() === 'manual' && manualStringId() === string.id"
-                  [attr.aria-pressed]="selectionMode() === 'manual' && manualStringId() === string.id"
+                  [class.manual-selected]="
+                    selectionMode() === 'manual' && manualStringId() === string.id
+                  "
+                  [attr.aria-pressed]="
+                    selectionMode() === 'manual' && manualStringId() === string.id
+                  "
                   [attr.aria-label]="'Saite ' + string.label + ', ' + string.note + string.octave"
-                  (click)="selectString(string.id)" [attr.data-testid]="'string-' + string.id">
+                  (click)="selectString(string.id)"
+                  [attr.data-testid]="'string-' + string.id"
+                >
                   <span class="string-number">{{ string.label }}</span>
                   <strong>{{ string.note }}</strong>
                   <small>{{ string.octave }}</small>
@@ -93,36 +128,54 @@ import {
               }
             </div>
 
-            <div class="pitch-readout" [attr.data-testid]="measurement() ? 'pitch-readout' : 'no-pitch'"
-              [class.is-tuned]="isInTune()" [class.is-flat]="tuningStatus() === 'flat'"
-              [class.is-sharp]="tuningStatus() === 'sharp'">
+            <div
+              class="pitch-readout"
+              [attr.data-testid]="measurement() ? 'pitch-readout' : 'no-pitch'"
+              [class.is-tuned]="isInTune()"
+              [class.is-flat]="tuningStatus() === 'flat'"
+              [class.is-sharp]="tuningStatus() === 'sharp'"
+            >
               <p class="readout-label">{{ readoutLabel() }}</p>
               <div class="note-value">
                 <span>{{ activeString() ? activeString()!.note : '—' }}</span>
-                @if (activeString()) { <sup>{{ activeString()!.octave }}</sup> }
+                @if (activeString()) {
+                  <sup>{{ activeString()!.octave }}</sup>
+                }
               </div>
               <p class="frequency-value">
-                {{ measurement() ? measurement()!.frequency.toFixed(1) + ' Hz' : 'Warte auf Signal' }}
+                {{
+                  measurement() ? measurement()!.frequency.toFixed(1) + ' Hz' : 'Warte auf Signal'
+                }}
               </p>
               <div class="tuning-meter" role="img" [attr.aria-label]="meterDescription()">
                 <div class="meter-track">
                   <span class="meter-zone left"></span><span class="meter-zone center"></span>
                   <span class="meter-zone right"></span>
                   @for (tick of meterTicks; track tick) {
-                    <span class="meter-tick" [class.major]="tick % 10 === 0"
-                      [class.center-tick]="tick === 0" [style.left.%]="50 + tick"></span>
+                    <span
+                      class="meter-tick"
+                      [class.major]="tick % 10 === 0"
+                      [class.center-tick]="tick === 0"
+                      [style.left.%]="50 + tick"
+                    ></span>
                   }
                   <span class="meter-needle" [style.left.%]="needlePosition()"></span>
                 </div>
                 <div class="meter-labels">
-                  <span>−50</span><span>−25</span><strong>0</strong><span>+25</span><span>+50 Cent</span>
+                  <span>−50</span><span>−25</span><strong>0</strong><span>+25</span
+                  ><span>+50 Cent</span>
                 </div>
               </div>
               <div class="cent-result" aria-live="polite">
                 @if (deviationCents() !== null) {
-                  <strong>{{ deviationCents()! > 0 ? '+' : '' }}{{ deviationCents()!.toFixed(0) }}</strong>
+                  <strong
+                    >{{ deviationCents()! > 0 ? '+' : ''
+                    }}{{ deviationCents()!.toFixed(0) }}</strong
+                  >
                   <span>Cent</span>
-                } @else { <strong>—</strong><span>Cent</span> }
+                } @else {
+                  <strong>—</strong><span>Cent</span>
+                }
               </div>
               <p class="status-text" role="status" aria-live="polite" data-testid="tuner-status">
                 {{ statusMessage() }}
@@ -133,17 +186,28 @@ import {
             </div>
 
             <div class="card-footer">
-              <button class="start-button" type="button" data-testid="tuner-toggle"
-                [disabled]="status() === 'requesting'" (click)="toggleAudio()">
-                @if (status() === 'requesting') { Mikrofon wird gestartet … }
-                @else if (isListening()) { <span class="stop-icon">■</span> Stimmgerät stoppen }
-                @else { <span class="mic-icon">◉</span> Mikrofon aktivieren }
+              <button
+                class="start-button"
+                type="button"
+                data-testid="tuner-toggle"
+                [disabled]="status() === 'requesting'"
+                (click)="toggleAudio()"
+              >
+                @if (status() === 'requesting') {
+                  Mikrofon wird gestartet …
+                } @else if (isListening()) {
+                  <span class="stop-icon">■</span> Stimmgerät stoppen
+                } @else {
+                  <span class="mic-icon">◉</span> Mikrofon aktivieren
+                }
               </button>
               <p>Dein Audio bleibt auf diesem Gerät. Keine Aufnahme, kein Upload.</p>
             </div>
           </section>
         </section>
-        <footer class="footer"><span>SAITUNO · OPEN SOURCE</span><span>© {{ currentYear }}</span></footer>
+        <footer class="footer">
+          <span>SAITUNO · OPEN SOURCE</span><span>© {{ currentYear }}</span>
+        </footer>
       </main>
     </ion-content>
   `,
@@ -166,7 +230,8 @@ export class HomePage {
   );
   readonly availableTunings = computed(() => this.activeInstrument().tunings);
   readonly activeTuning = computed<TuningPreset>(
-    () => getTuning(this.selectedInstrumentId(), this.selectedTuningId()) ?? this.availableTunings()[0]!
+    () =>
+      getTuning(this.selectedInstrumentId(), this.selectedTuningId()) ?? this.availableTunings()[0]!
   );
   readonly strings = computed(() => this.activeTuning().strings);
   readonly automaticString = computed(() => {
@@ -202,8 +267,13 @@ export class HomePage {
   });
   readonly statusMessage = computed(() => {
     if (this.status() === 'requesting') return 'Bitte erlaube den Mikrofonzugriff.';
-    if (this.status() === 'unsupported') return 'Dein Browser unterstützt die benötigte Audiofunktion nicht.';
-    if (this.status() === 'permission-denied' || this.status() === 'no-input' || this.status() === 'error') {
+    if (this.status() === 'unsupported')
+      return 'Dein Browser unterstützt die benötigte Audiofunktion nicht.';
+    if (
+      this.status() === 'permission-denied' ||
+      this.status() === 'no-input' ||
+      this.status() === 'error'
+    ) {
       return this.audio.errorMessage() ?? 'Audio konnte nicht gestartet werden.';
     }
     if (!this.isListening()) return 'Aktiviere das Mikrofon, um mit dem Stimmen zu beginnen.';
@@ -219,7 +289,9 @@ export class HomePage {
     if (cents === null) return 'Stimmungsanzeige wartet auf ein Tonsignal.';
     return cents < -3
       ? `${Math.round(Math.abs(cents))} Cent zu tief`
-      : cents > 3 ? `${Math.round(cents)} Cent zu hoch` : 'Saite ist gestimmt.';
+      : cents > 3
+        ? `${Math.round(cents)} Cent zu hoch`
+        : 'Saite ist gestimmt.';
   });
 
   selectInstrument(event: Event): void {

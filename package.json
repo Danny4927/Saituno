@@ -4,7 +4,10 @@
   "private": true,
   "description": "A simple, free tuner for guitar, bass and ukulele.",
   "license": "MIT",
-  "engines": { "node": ">=26.0.0", "npm": ">=11.0.0" },
+  "engines": {
+    "node": ">=26.0.0",
+    "npm": ">=11.0.0"
+  },
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
