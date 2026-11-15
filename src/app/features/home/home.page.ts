@@ -55,11 +55,10 @@ import {
                 <select
                   aria-label="Instrument auswählen"
                   data-testid="instrument-select"
-                  [value]="selectedInstrumentId()"
                   (change)="selectInstrument($event)"
                 >
                   @for (instrument of instruments; track instrument.id) {
-                    <option [value]="instrument.id">
+                    <option [value]="instrument.id" [selected]="instrument.id === selectedInstrumentId()">
                       {{ instrument.name }}
                     </option>
                   }
@@ -70,11 +69,10 @@ import {
                 <select
                   aria-label="Stimmung auswählen"
                   data-testid="tuning-select"
-                  [value]="selectedTuningId()"
                   (change)="selectTuning($event)"
                 >
                   @for (tuning of availableTunings(); track tuning.id) {
-                    <option [value]="tuning.id">
+                    <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">
                       {{ tuning.name }}
                     </option>
                   }
