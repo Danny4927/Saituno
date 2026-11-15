@@ -25,15 +25,27 @@ export class SettingsService {
   readonly settings = this._settings.asReadonly();
 
   async load(): Promise<void> {
-    try {
-      let value = Capacitor.isNativePlatform()
-        ? (await Preferences.get({ key: STORAGE_KEY })).value
-        : null;
-      if (!value && typeof window !== 'undefined') {
-        value = window.localStorage.getItem(STORAGE_KEY);
-      }
-      if (!value) return;
+    let value: string | null = null;
 
+    if (Capacitor.isNativePlatform()) {
+      try {
+        value = (await Preferences.get({ key: STORAGE_KEY })).value;
+      } catch {
+        // Fall back to WebView localStorage if the native bridge is unavailable.
+      }
+    }
+
+    if (!value && typeof window !== 'undefined') {
+      try {
+        value = window.localStorage.getItem(STORAGE_KEY);
+      } catch {
+        // Storage can be unavailable in private browsing or a restricted WebView.
+      }
+    }
+
+    if (!value) return;
+
+    try {
       const parsed: unknown = JSON.parse(value);
       if (!parsed || typeof parsed !== 'object') return;
       const candidate = parsed as Partial<AppSettings>;
@@ -57,8 +69,7 @@ export class SettingsService {
         manualStringId
       });
     } catch {
-      // Storage can be unavailable in private browsing or a restricted WebView.
-      // Keep the safe defaults and let the tuner remain usable.
+      // Ignore corrupt values and keep the safe defaults.
       this._settings.set(DEFAULT_SETTINGS);
     }
   }
