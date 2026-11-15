@@ -5,7 +5,7 @@ test('renders the Saituno tuner and visual baseline', async ({ page }) => {
   await expect(page).toHaveTitle(/Saituno/);
   await expect(page.getByRole('heading', { name: /Stimm dein Instrument/i })).toBeVisible();
   await expect(page.getByTestId('tuner-panel')).toBeVisible();
-  await expect(page.request.get('/worklets/yin-processor.js')).resolves.toBeTruthy();
+  expect(await page.request.get('/worklets/yin-processor.js')).toBeOK();
   await expect(page.getByTestId('no-pitch')).toBeVisible();
   await expect(page.getByTestId('tuner-toggle')).toContainText('Mikrofon aktivieren');
   await expect(page.getByTestId('auto-mode')).toHaveAttribute('aria-pressed', 'true');
