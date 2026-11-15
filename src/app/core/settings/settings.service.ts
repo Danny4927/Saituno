@@ -59,7 +59,6 @@ export class SettingsService {
   }
 
   private restore(value: string): void {
-    console.log('SAITUNO_RESTORE_START:' + value);
     try {
       const parsed: unknown = JSON.parse(value);
       if (!parsed || typeof parsed !== 'object') return;
@@ -83,7 +82,6 @@ export class SettingsService {
         selectionMode,
         manualStringId
       });
-      console.log('SAITUNO_RESTORE_DONE:' + JSON.stringify(this._settings()));
     } catch {
       // Ignore corrupt values and keep the safe defaults.
       this._settings.set(DEFAULT_SETTINGS);
