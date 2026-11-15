@@ -59,3 +59,12 @@ test('shows a helpful message when microphone permission is denied', async ({ pa
   await page.getByTestId('tuner-toggle').click();
   await expect(page.getByRole('status')).toContainText('Mikrofonzugriff wurde verweigert');
 });
+
+test('receives microphone samples through the AudioWorklet', async ({ page, context }) => {
+  await context.grantPermissions(['microphone']);
+  await page.goto('/');
+  await page.getByTestId('tuner-toggle').click();
+  await expect(page.getByTestId('tuner-status')).toContainText('Ich höre zu', { timeout: 5_000 });
+  await expect(page.getByTestId('pitch-readout')).toBeVisible({ timeout: 10_000 });
+  await expect(page.locator('.frequency-value')).toContainText('Hz');
+});

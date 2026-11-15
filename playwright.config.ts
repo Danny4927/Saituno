@@ -8,7 +8,10 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: 'http://127.0.0.1:4200',
-    trace: 'retain-on-failure'
+    trace: 'retain-on-failure',
+    launchOptions: {
+      args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream']
+    }
   },
   projects: [
     {
