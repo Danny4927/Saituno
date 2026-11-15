@@ -1,6 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AudioService } from './audio.service';
 
+class FakeAudioContext {
+  readonly state = 'running';
+  readonly resume = vi.fn().mockResolvedValue(undefined);
+  readonly close = vi.fn().mockResolvedValue(undefined);
+}
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });
@@ -21,7 +27,7 @@ describe('AudioService', () => {
   it('maps microphone permission denial to a dedicated state', async () => {
     const getUserMedia = vi.fn().mockRejectedValue(new DOMException('Denied', 'NotAllowedError'));
     vi.stubGlobal('navigator', { mediaDevices: { getUserMedia } });
-    vi.stubGlobal('AudioContext', class {});
+    vi.stubGlobal('AudioContext', FakeAudioContext);
     vi.stubGlobal('AudioWorkletNode', class {});
 
     const service = new AudioService();
