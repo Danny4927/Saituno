@@ -4,7 +4,7 @@
 
 Saituno is an open-source, privacy-first instrument tuner. The application is designed to run locally in the browser or as a native Android/iOS app. There is no backend, account system, analytics, advertising or audio upload.
 
-> **Project status:** Phase 3 tuner interface implemented. The current interactive tuner supports automatic and manual string selection for six-string guitar in E standard tuning. Phase 2 real-device accuracy and latency measurements remain pending.
+> **Project status:** Phase 4 instrument and tuning selection implemented. The tuner supports guitar, ukulele and bass presets with automatic and manual string selection. Phase 2 real-device accuracy and latency measurements remain pending.
 
 ## Technology
 
@@ -59,6 +59,15 @@ Android builds require the Android SDK and a supported JDK/Gradle environment. i
 ## PWA
 
 The web app includes a web manifest and Angular service-worker configuration. The production build registers the service worker; development mode does not. The manifest uses relative start and scope URLs so it can be hosted below a repository path.
+
+## Instruments and tunings
+
+The tuner includes data-driven presets for:
+- Guitar: E Standard, Drop D, Eb Standard and D Standard
+- Ukulele: Standard High G and Low G
+- Bass: 4-, 5- and 6-string Standard, BEAD and Drop D
+
+Instrument and tuning selection share the same pitch-detection engine. New presets can be added to `src/app/domain/tuner/tuning-catalog.ts` without changing the audio processor.
 
 ## Audio prototype
 

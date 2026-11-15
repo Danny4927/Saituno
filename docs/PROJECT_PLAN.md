@@ -3,7 +3,7 @@
 **Produkt:** Saituno  
 **Untertitel:** Open Source Instrument Tuner  
 **Zielplattformen:** Web, Android und iOS  
-**Projektstatus:** Phase 1 und Phase 2 gemerged; Phase 3 Tuner-Oberfläche implementiert
+**Projektstatus:** Phase 1–3 gemerged; Phase 4 Instrument- und Stimmungsauswahl implementiert
 
 ---
 
@@ -466,13 +466,16 @@ Zusätzlich sind reale Instrumente und Mikrofone erforderlich. Mindestens eine G
 
 ### Phase 4 – Instrumente und Stimmungen
 
-- Gitarren-Konfigurationen.
-- Ukulele-Konfigurationen.
-- Bass-Konfigurationen.
-- Datengetriebene Stimmungsverwaltung.
-- Instrument- und Stimmungsauswahl.
+- [x] Gitarren-Konfigurationen: E Standard, Drop D, Eb Standard und D Standard.
+- [x] Ukulele-Konfigurationen: Standard High G und Low G.
+- [x] Bass-Konfigurationen: 4-, 5- und 6-Saiter Standard, BEAD und Drop D.
+- [x] Datengetriebene Stimmungsverwaltung mit MIDI-basierten Sollfrequenzen.
+- [x] Instrument- und Stimmungsauswahl in der Tuner-Oberfläche.
+- [x] Automatische und manuelle Saitenauswahl für alle Presets.
+- [x] Unit-Tests für Preset-Inhalte, Frequenzberechnung und Saitenzuordnung.
+- [x] Playwright-E2E-Test für Instrument- und Stimmungswechsel.
 
-**Abnahme:** Alle definierten MVP-Instrumente und Stimmungen funktionieren.
+**Abnahme:** Alle im MVP definierten Instrumente und Stimmungen sind auswählbar und verwenden dieselbe Pitch-Detection-Engine. Reale Instrumenttests bleiben Teil der plattformübergreifenden Validierung.
 
 ### Phase 5 – Plattformintegration
 
@@ -604,7 +607,7 @@ Der Name ist eine Produktentscheidung für die Entwicklung, keine bestätigte ma
 
 ## 18. Nächster Umsetzungsschritt
 
-Phase 1 und Phase 2 sind gemerged. Phase 3 implementiert die eigentliche Tuner-Oberfläche mit Cent-Anzeige, Stimmstatus sowie automatischer und manueller Saitenauswahl für Gitarre E Standard. Als Nächstes folgt Phase 4 mit datengetriebenen Instrument- und Stimmungskonfigurationen. Reale Gerätetests und Messungen der Audio-Genauigkeit/Latenz aus Phase 2 bleiben plattformübergreifend offen.
+Phase 1 und Phase 2 sind gemerged. Phase 3 implementiert die eigentliche Tuner-Oberfläche mit Cent-Anzeige, Stimmstatus sowie automatischer und manueller Saitenauswahl für Gitarre E Standard. Phase 4 ergänzt datengetriebene Instrument- und Stimmungskonfigurationen für Gitarre, Ukulele und Bass. Als Nächstes folgt Phase 5 mit Plattformintegration, Offline-Verhalten, lokalen Einstellungen und Audio-Lifecycle-Tests. Reale Gerätetests und Messungen der Audio-Genauigkeit/Latenz aus Phase 2 bleiben plattformübergreifend offen.
 
 
 ---
@@ -836,3 +839,40 @@ Die Zeiten sind aus Fenster- und Hop-Größe abgeleitet, keine gemessenen Ende-z
 - [ ] Audio-Unterbrechungen, App-Backgrounding und Gerätewechsel validieren
 
 Die verbindliche Testmatrix steht in `docs/PHASE_2_TEST_MATRIX.md`; technische Details und bekannte Einschränkungen in `docs/audio-engine.md`.
+
+
+---
+
+## 25. Umsetzungsstand Phase 4 – Instrumente und Stimmungen (15.11.2026)
+
+**Status: Implementiert; CI-Abnahme läuft im Pull Request.**
+
+### Enthaltene Presets
+
+| Instrument | Stimmungen |
+|---|---|
+| Gitarre | E Standard, Drop D, Eb Standard, D Standard |
+| Ukulele | Standard High G, Low G |
+| Bass | 4-Saiter Standard, 5-Saiter Standard, 6-Saiter Standard, BEAD, Drop D |
+
+### Architektur
+
+- Instrumente und Stimmungen liegen zentral in `src/app/domain/tuner/tuning-catalog.ts`.
+- Sollfrequenzen werden aus MIDI-Notennummern und A4 = 440 Hz berechnet.
+- Die Saitenerkennung arbeitet auf dem jeweils aktiven Preset.
+- Die Audio-Engine und der YIN-Worklet bleiben instrumentunabhängig.
+- Neue Presets benötigen keine Änderung an der Audio-Infrastruktur.
+
+### Qualitätssicherung
+
+- Unit-Tests für alle Instrumente, Presets und Frequenzwerte.
+- Playwright-Test für Wechsel zwischen Instrumenten und Stimmungen.
+- Visual Regression Baseline für die neue Auswahloberfläche.
+- npm install-script approvals sind auf die konkret geprüften Paketversionen begrenzt.
+- GitHub Actions werden auf Node.js-24-kompatible Versionen aktualisiert.
+
+### Weiterhin offen
+
+- [ ] Reale Stimmtests für alle Instrumente und Stimmungen.
+- [ ] Genauigkeit und Reaktionszeit auf echten Geräten dokumentieren.
+- [ ] Android- und iOS-Audio-Lifecycle testen.

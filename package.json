@@ -4,18 +4,15 @@
   "private": true,
   "description": "A simple, free tuner for guitar, bass and ukulele.",
   "license": "MIT",
-  "engines": {
-    "node": ">=26.0.0",
-    "npm": ">=11.0.0"
-  },
+  "engines": { "node": ">=26.0.0", "npm": ">=11.0.0" },
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
     "build:production": "ng build --configuration production",
     "build:pages": "ng build --configuration production --base-href /Saituno/",
     "build:native": "ng build --configuration production --base-href /",
-    "lint": "prettier --check \"src/**/*.{ts,html,scss,json}\" \"public/worklets/**/*.js\" \"*.{json,js,ts}\"",
-    "format": "prettier --write \"src/**/*.{ts,html,scss,json}\" \"public/worklets/**/*.js\" \"*.{json,js,ts}\"",
+    "lint": "prettier --check \"src/**/*.{ts,html,scss,json}\" \"public/worklets/**/*.js\" \"*.{json,js,ts,mts}\"",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,json}\" \"public/worklets/**/*.js\" \"*.{json,js,ts,mts}\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
@@ -50,5 +47,11 @@
     "prettier": "3.6.2",
     "typescript": "6.0.3",
     "vitest": "4.1.12"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.28.2": true,
+    "lmdb@3.5.6": true,
+    "msgpackr-extract@3.0.7": true
   }
 }
