@@ -3,7 +3,7 @@
 **Produkt:** Saituno  
 **Untertitel:** Open Source Instrument Tuner  
 **Zielplattformen:** Web, Android und iOS  
-**Projektstatus (15.11.2026):** Phasen 1–5 gemerged; Phase 6 Release-Vorbereitung als nächster Schritt
+**Projektstatus (15.11.2026):** Phasen 1–5 gemerged; Phase 6 Implementierung im PR #10, Geräte- und Release-Abnahme offen
 
 ---
 
@@ -900,6 +900,10 @@ Die verbindliche Testmatrix steht in `docs/PHASE_2_TEST_MATRIX.md`; technische D
 
 **Offene Abnahme:** Physische Android-/iOS-Tests (Berechtigungen, App-Wechsel, Sperrbildschirm, Audio-Unterbrechungen), Web-Offline-Reload auf Endgeräten und kalibrierte Messung von Genauigkeit/Latenz.
 
-## 27. Phase 6 – Release-Vorbereitung: Abnahmekriterien
+## 27. Phase 6 – Release-Vorbereitung
 
-Die konkrete Checkliste wird in `docs/PHASE_6_RELEASE_CHECKLIST.md` gepflegt. Kein Release darf Audioqualität, Store-/Markenfreigabe oder physische Plattformtests als erfolgreich bezeichnen, solange die jeweiligen Nachweise fehlen.
+Die Implementierung wird in einem zusammenhängenden Pull Request gepflegt. Der PR ergänzt Accessibility-Verbesserungen, reproduzierbare native Build-Prüfungen, Android-Release-Signierung und GitHub-Release-Automatisierung sowie PWA-/Native-Metadaten. Die Details und verbleibenden Abnahmepunkte stehen in `docs/PHASE_6_RELEASE_CHECKLIST.md`.
+
+Automatisiert werden ein Android-Debug-APK-Build und ein iOS-Simulator-Build ausgeführt. Ein versionsgebundener Git-Tag (`vX.Y.Z`) kann eine signierte Android-APK inklusive SHA-256-Prüfsumme veröffentlichen, sofern alle vier Android-Keystore-Secrets konfiguriert sind. iOS-Store-Distribution benötigt weiterhin Apple-Zertifikate, Provisioning Profiles und Account-Zugang.
+
+Die folgenden Punkte bleiben bewusst externe Abnahmen: physische Android-/iOS-Geräte, kalibrierte Pitch- und Latenzmessungen, vollständige Screenreader-/WCAG-Review, Android-Keystore-Konfiguration und Apple-Distribution. Kein Dokument oder Release darf diese Tests als durchgeführt ausweisen, bevor Nachweise vorliegen.
