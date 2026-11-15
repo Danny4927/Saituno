@@ -41,7 +41,7 @@ describe('AudioService', () => {
   it('maps a missing microphone to a dedicated state', async () => {
     const getUserMedia = vi.fn().mockRejectedValue(new DOMException('Missing', 'NotFoundError'));
     vi.stubGlobal('navigator', { mediaDevices: { getUserMedia } });
-    vi.stubGlobal('AudioContext', class {});
+    vi.stubGlobal('AudioContext', FakeAudioContext);
     vi.stubGlobal('AudioWorkletNode', class {});
 
     const service = new AudioService();
