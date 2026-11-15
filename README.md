@@ -43,21 +43,16 @@ Useful commands:
 
 ## Native projects
 
-Capacitor is configured in `capacitor.config.ts`. Generate the platform projects after installing dependencies:
+The Capacitor Android and iOS projects are included in `android/` and `ios/`. Capacitor is configured in `capacitor.config.ts`.
+
+After changing web assets or dependencies, synchronize the native projects:
 
 ```bash
 npm run build:native
-npm run native:add:android
 npm run native:sync
 ```
 
-For iOS, run the following on macOS with Xcode installed:
-
-```bash
-npm run build:native
-npm run native:add:ios
-npm run native:sync
-```
+Open the Android project in Android Studio with `npx cap open android`. On macOS with Xcode installed, open the iOS project with `npx cap open ios`.
 
 Android builds require the Android SDK and a supported JDK/Gradle environment. iOS builds require macOS and Xcode. Native signing credentials must never be committed to this repository.
 
