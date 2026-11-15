@@ -9,7 +9,9 @@ class FakeAudioContext {
   readonly audioWorklet = { addModule: vi.fn().mockResolvedValue(undefined) };
   readonly source = { connect: vi.fn(), disconnect: vi.fn() };
   readonly gainNode = { gain: { value: 1 }, connect: vi.fn(), disconnect: vi.fn() };
-  readonly resume = vi.fn().mockImplementation(async () => { this.state = 'running'; });
+  readonly resume = vi.fn().mockImplementation(async () => {
+    this.state = 'running';
+  });
   readonly close = vi.fn().mockImplementation(async () => {
     this.state = 'closed';
   });
@@ -115,5 +117,4 @@ describe('AudioService', () => {
     expect(service.status()).toBe('listening');
     await service.stop();
   });
-
 });
