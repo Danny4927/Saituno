@@ -12,7 +12,8 @@
           "/*.css",
           "/*.js",
           "/manifest.webmanifest",
-          "/icons/**"
+          "/icons/**",
+          "/worklets/**"
         ]
       }
     }
