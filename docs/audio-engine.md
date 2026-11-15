@@ -35,12 +35,16 @@ The estimator:
 - rejects invalid sample rates, short buffers and low-RMS input;
 - calculates the YIN difference function and cumulative mean normalized difference;
 - selects a minimum under a configurable threshold, with a bounded fallback;
-- refines the period with parabolic interpolation;
+- selects the period with the CMND curve and refines the sub-sample period with parabolic interpolation on the raw difference curve;
 - returns frequency, confidence and RMS, or `null` when the signal is unsuitable.
 
 The current defaults are 25–1,500 Hz, a YIN threshold of 0.15 and a minimum RMS of 0.004. These are prototype parameters and need validation with real instrument recordings and devices.
 
 ## Browser and native lifecycle
+
+The Android manifest declares `RECORD_AUDIO` and `MODIFY_AUDIO_SETTINGS`. Capacitor's Android WebChromeClient handles the WebView media-capture permission request and asks Android for the corresponding runtime permission. The iOS app declares `NSMicrophoneUsageDescription` in `Info.plist`; iOS requires this purpose string before microphone access. The user-facing text explains local pitch analysis and explicitly says audio is neither recorded nor transmitted.
+
+The AudioContext is created and resumed directly from the user's button gesture before awaiting the microphone permission prompt. This avoids delaying the browser's audio activation until after an asynchronous permission request.
 
 `AudioService` owns the microphone stream, AudioContext, source node, worklet node and silent output connection. Start is only called from the user's button action. Stop disconnects nodes, stops every MediaStream track and closes the AudioContext.
 
