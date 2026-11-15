@@ -111,7 +111,12 @@ describe('AudioService', () => {
       return { active: true, getAudioTracks: () => [audioTrack], getTracks: () => [audioTrack] };
     });
     vi.stubGlobal('navigator', { mediaDevices: { getUserMedia } });
-    vi.stubGlobal('document', { baseURI: 'https://saituno.test/' });
+    vi.stubGlobal('document', {
+      baseURI: 'https://saituno.test/',
+      visibilityState: 'visible',
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    });
     vi.stubGlobal('AudioContext', FakeAudioContext);
     vi.stubGlobal('AudioWorkletNode', FakeAudioWorkletNode);
 
@@ -122,4 +127,39 @@ describe('AudioService', () => {
     expect(service.status()).toBe('listening');
     await service.stop();
   });
+  it('stops the microphone when the document enters the background', async () => {
+    const stopTrack = vi.fn();
+    const audioTrack = { readyState: 'live' as MediaStreamTrackState, stop: stopTrack };
+    const getUserMedia = vi.fn().mockResolvedValue({
+      active: true,
+      getAudioTracks: () => [audioTrack],
+      getTracks: () => [audioTrack]
+    });
+    let visibilityHandler: (() => void) | undefined;
+    const fakeDocument = {
+      baseURI: 'https://saituno.test/',
+      visibilityState: 'visible',
+      addEventListener: vi.fn((event: string, handler: () => void) => {
+        if (event === 'visibilitychange') visibilityHandler = handler;
+      }),
+      removeEventListener: vi.fn()
+    };
+    vi.stubGlobal('navigator', { mediaDevices: { getUserMedia } });
+    vi.stubGlobal('document', fakeDocument);
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('AudioWorkletNode', FakeAudioWorkletNode);
+
+    const service = new AudioService();
+    await service.start();
+    expect(service.status()).toBe('listening');
+
+    fakeDocument.visibilityState = 'hidden';
+    visibilityHandler?.();
+    await vi.waitFor(() => expect(service.status()).toBe('paused'));
+
+    expect(stopTrack).toHaveBeenCalledOnce();
+    expect(service.errorMessage()).toContain('Hintergrund');
+    expect(FakeAudioContext.latest!.state).toBe('closed');
+  });
+
 });
