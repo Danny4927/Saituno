@@ -6,7 +6,7 @@ test('renders the Saituno tuner and visual baseline', async ({ page }, testInfo)
   const brandLink = page.getByRole('link', { name: 'Saituno Startseite' });
   await expect(brandLink).toHaveAttribute('href', './');
   await brandLink.click();
-  await expect(page).toHaveURL(/\\/$/);
+  await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('heading', { name: /Stimm dein Instrument/i })).toBeVisible();
   await expect(page.getByTestId('tuner-panel')).toBeVisible();
   expect(await page.request.get('/worklets/yin-processor.js')).toBeOK();
