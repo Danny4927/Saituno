@@ -165,5 +165,4 @@ describe('SettingsService', () => {
     expect(service.settings()).toEqual(webValue);
     expect(Preferences.get).not.toHaveBeenCalled();
   });
-
 });
