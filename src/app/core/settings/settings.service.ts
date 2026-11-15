@@ -59,33 +59,33 @@ export class SettingsService {
   }
 
   private restore(value: string): void {
-      try {
-        const parsed: unknown = JSON.parse(value);
-        if (!parsed || typeof parsed !== 'object') return;
-        const candidate = parsed as Partial<AppSettings>;
-        const instrument = getInstrument(candidate.instrumentId ?? '');
-        if (!instrument) return;
-  
-        const tuning = getTuning(instrument.id, candidate.tuningId ?? '');
-        if (!tuning) return;
-  
-        const selectionMode = candidate.selectionMode === 'manual' ? 'manual' : 'auto';
-        const manualStringId =
-          typeof candidate.manualStringId === 'string' &&
-          tuning.strings.some((string) => string.id === candidate.manualStringId)
-            ? candidate.manualStringId
-            : (tuning.strings[0]?.id ?? null);
-  
-        this._settings.set({
-          instrumentId: instrument.id,
-          tuningId: tuning.id,
-          selectionMode,
-          manualStringId
-        });
-      } catch {
-        // Ignore corrupt values and keep the safe defaults.
-        this._settings.set(DEFAULT_SETTINGS);
-      }
+    try {
+      const parsed: unknown = JSON.parse(value);
+      if (!parsed || typeof parsed !== 'object') return;
+      const candidate = parsed as Partial<AppSettings>;
+      const instrument = getInstrument(candidate.instrumentId ?? '');
+      if (!instrument) return;
+
+      const tuning = getTuning(instrument.id, candidate.tuningId ?? '');
+      if (!tuning) return;
+
+      const selectionMode = candidate.selectionMode === 'manual' ? 'manual' : 'auto';
+      const manualStringId =
+        typeof candidate.manualStringId === 'string' &&
+        tuning.strings.some((string) => string.id === candidate.manualStringId)
+          ? candidate.manualStringId
+          : (tuning.strings[0]?.id ?? null);
+
+      this._settings.set({
+        instrumentId: instrument.id,
+        tuningId: tuning.id,
+        selectionMode,
+        manualStringId
+      });
+    } catch {
+      // Ignore corrupt values and keep the safe defaults.
+      this._settings.set(DEFAULT_SETTINGS);
+    }
   }
 
   async update(partial: Partial<AppSettings>): Promise<void> {
