@@ -14,7 +14,7 @@ Saituno is an open-source, privacy-first instrument tuner. The application is de
 - TypeScript 6.0.x
 - Angular Service Worker for the PWA foundation
 - Vitest for unit tests
-- Playwright for browser end-to-end tests
+- Playwright for browser end-to-end and screenshot-based visual regression tests
 - GitHub Actions for continuous integration
 
 Node.js 26 LTS is required. The exact framework versions are pinned in `package.json`; `.nvmrc` selects Node 26.
