@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { getInstrument, getTuning } from '../../domain/tuner/tuning-catalog';
 
@@ -25,7 +26,11 @@ export class SettingsService {
 
   async load(): Promise<void> {
     try {
-      const { value } = await Preferences.get({ key: STORAGE_KEY });
+      const value = Capacitor.isNativePlatform()
+        ? (await Preferences.get({ key: STORAGE_KEY })).value
+        : typeof window !== 'undefined'
+          ? window.localStorage.getItem(STORAGE_KEY)
+          : null;
       if (!value) return;
 
       const parsed: unknown = JSON.parse(value);
@@ -80,7 +85,12 @@ export class SettingsService {
 
     this._settings.set(validated);
     try {
-      await Preferences.set({ key: STORAGE_KEY, value: JSON.stringify(validated) });
+      const value = JSON.stringify(validated);
+      if (Capacitor.isNativePlatform()) {
+        await Preferences.set({ key: STORAGE_KEY, value });
+      } else if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEY, value);
+      }
     } catch {
       // Persistence is best-effort; current-session settings still work.
     }
