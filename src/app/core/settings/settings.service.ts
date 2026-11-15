@@ -65,10 +65,16 @@ export class SettingsService {
       const candidate = parsed as Partial<AppSettings>;
       console.info('[settings-debug] restore candidate', candidate);
       const instrument = getInstrument(candidate.instrumentId ?? '');
-      if (!instrument) { console.info('[settings-debug] invalid instrument'); return; }
+      if (!instrument) {
+        console.info('[settings-debug] invalid instrument');
+        return;
+      }
 
       const tuning = getTuning(instrument.id, candidate.tuningId ?? '');
-      if (!tuning) { console.info('[settings-debug] invalid tuning', candidate.instrumentId, candidate.tuningId); return; }
+      if (!tuning) {
+        console.info('[settings-debug] invalid tuning', candidate.instrumentId, candidate.tuningId);
+        return;
+      }
 
       const selectionMode = candidate.selectionMode === 'manual' ? 'manual' : 'auto';
       const manualStringId =
