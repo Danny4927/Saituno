@@ -845,7 +845,7 @@ Die verbindliche Testmatrix steht in `docs/PHASE_2_TEST_MATRIX.md`; technische D
 
 ## 25. Umsetzungsstand Phase 4 – Instrumente und Stimmungen (15.11.2026)
 
-**Status: Implementiert; CI-Abnahme läuft im Pull Request.**
+**Status: Implementiert; CI und Native Scaffold erfolgreich.**
 
 ### Enthaltene Presets
 
