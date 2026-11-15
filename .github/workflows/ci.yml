@@ -7,6 +7,7 @@ on:
       - 'phase-1/**'
       - 'phase-2/**'
       - 'phase-3/**'
+      - 'phase-4/**'
   pull_request:
     branches:
       - main
@@ -25,12 +26,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
 
@@ -83,14 +84,25 @@ jobs:
         run: |
           SNAPSHOT_DIR="e2e/app.spec.ts-snapshots"
           SNAPSHOT_FILE="$SNAPSHOT_DIR/saituno-tuner-interface-chromium-linux.png"
-          if [ ! -f "$SNAPSHOT_FILE" ]; then
+          if [ -f e2e/UPDATE_VISUAL_BASELINES ]; then
+            npm run test:e2e -- --update-snapshots
+            rm e2e/UPDATE_VISUAL_BASELINES
+            if [ "$GITHUB_EVENT_NAME" = "push" ] || [ "$PR_HEAD_REPOSITORY" = "$GITHUB_REPOSITORY" ]; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+users.noreply.github.com"
+              git add "$SNAPSHOT_DIR" e2e/UPDATE_VISUAL_BASELINES
+              git commit -m "test: update Phase 4 tuner visual baseline"
+              git pull --rebase origin "$TARGET_BRANCH"
+              git push origin "HEAD:$TARGET_BRANCH"
+            fi
+          elif [ ! -f "$SNAPSHOT_FILE" ]; then
             npm run test:e2e -- --update-snapshots
             if [ "$GITHUB_EVENT_NAME" = "push" ] || [ "$PR_HEAD_REPOSITORY" = "$GITHUB_REPOSITORY" ]; then
               git config user.name "github-actions[bot]"
               git config user.email "41898282+users.noreply.github.com"
               git add "$SNAPSHOT_DIR"
               if ! git diff --cached --quiet; then
-                git commit -m "test: add Phase 3 visual regression baseline"
+                git commit -m "test: add Phase 4 visual regression baseline"
                 git pull --rebase origin "$TARGET_BRANCH"
                 git push origin "HEAD:$TARGET_BRANCH"
               fi
