@@ -15,13 +15,19 @@ describe('instrument and tuning catalog', () => {
 
   it('contains all planned guitar tunings', () => {
     expect(getInstrument('guitar')?.tunings.map(({ id }) => id)).toEqual([
-      'guitar-standard', 'guitar-drop-d', 'guitar-eb-standard', 'guitar-d-standard'
+      'guitar-standard',
+      'guitar-drop-d',
+      'guitar-eb-standard',
+      'guitar-d-standard'
     ]);
   });
 
   it('defines high-G and low-G ukulele tunings', () => {
     expect(getTuning('ukulele', 'ukulele-high-g')?.strings.map(({ id }) => id)).toEqual([
-      'G4', 'C4', 'E4', 'A4'
+      'G4',
+      'C4',
+      'E4',
+      'A4'
     ]);
     expect(getTuning('ukulele', 'ukulele-low-g')?.strings[0].midi).toBe(55);
   });
@@ -29,7 +35,11 @@ describe('instrument and tuning catalog', () => {
   it('contains four-, five- and six-string bass plus BEAD and Drop D', () => {
     const bass = getInstrument('bass');
     expect(bass?.tunings.map(({ id }) => id)).toEqual([
-      'bass-4-standard', 'bass-5-standard', 'bass-6-standard', 'bass-bead', 'bass-drop-d'
+      'bass-4-standard',
+      'bass-5-standard',
+      'bass-6-standard',
+      'bass-bead',
+      'bass-drop-d'
     ]);
     expect(getTuning('bass', 'bass-5-standard')?.strings).toHaveLength(5);
     expect(getTuning('bass', 'bass-6-standard')?.strings).toHaveLength(6);
