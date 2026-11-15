@@ -35,6 +35,9 @@ jobs:
       - name: Resolve npm lockfile
         run: npm install --package-lock-only --ignore-scripts
 
+      - name: Install locked dependencies
+        run: npm ci
+
       - name: Format source and configuration
         run: npm run format
 
@@ -53,9 +56,6 @@ jobs:
               git push origin "HEAD:$TARGET_BRANCH"
             fi
           fi
-
-      - name: Install locked dependencies
-        run: npm ci
 
       - name: Check formatting
         run: npm run lint
