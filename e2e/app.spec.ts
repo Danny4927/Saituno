@@ -76,16 +76,32 @@ test('receives microphone samples through the AudioWorklet', async ({ page, cont
 
 
 test('persists instrument, tuning and string selection after reload', async ({ page }) => {
+  const storageReads: string[] = [];
+  page.on('console', (message) => {
+    if (message.text().startsWith('SAITUNO_STORAGE_READ:')) {
+      storageReads.push(message.text());
+    }
+  });
+  await page.addInitScript(() => {
+    const originalGetItem = Storage.prototype.getItem;
+    Storage.prototype.getItem = function (key: string): string | null {
+      const value = originalGetItem.call(this, key);
+      if (key === 'saituno.settings.v1') console.log('SAITUNO_STORAGE_READ:' + value);
+      return value;
+    };
+  });
   await page.goto('/');
   await page.getByTestId('instrument-select').selectOption('bass');
   await page.getByTestId('tuning-select').selectOption('bass-5-standard');
   await page.getByTestId('manual-mode').click();
   await page.getByTestId('string-B0').click();
-  await expect
-    .poll(() => page.evaluate(() => localStorage.getItem('saituno.settings.v1')))
-    .toContain('"instrumentId":"bass"');
+  const storedBeforeReload = await page.evaluate(() => localStorage.getItem('saituno.settings.v1'));
+  console.log('SAITUNO_STORAGE_BEFORE_RELOAD:' + storedBeforeReload);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('saituno.settings.v1'))).toContain('"instrumentId":"bass"');
 
   await page.reload();
+  console.log('SAITUNO_STORAGE_READS:' + JSON.stringify(storageReads));
+  console.log('SAITUNO_STORAGE_AFTER_RELOAD:' + await page.evaluate(() => localStorage.getItem('saituno.settings.v1')));
 
   await expect(page.getByTestId('instrument-select')).toHaveValue('bass');
   await expect(page.getByTestId('tuning-select')).toHaveValue('bass-5-standard');
