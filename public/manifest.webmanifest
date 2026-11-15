@@ -1,0 +1,19 @@
+{
+  "name": "Saituno – Instrument Tuner",
+  "short_name": "Saituno",
+  "description": "Ein kostenloses, minimalistisches Stimmgerät für Gitarre, Bass und Ukulele.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10131a",
+  "theme_color": "#10131a",
+  "icons": [
+    {
+      "src": "icons/saituno.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
