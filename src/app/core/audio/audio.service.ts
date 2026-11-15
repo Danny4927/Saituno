@@ -24,6 +24,22 @@ export class AudioService implements OnDestroy {
   private receivedWorkletMessage = false;
   private startupTimer: ReturnType<typeof setTimeout> | null = null;
 
+  private readonly handleVisibilityChange = (): void => {
+    if (document.visibilityState === 'hidden') void this.pauseForBackground();
+  };
+  private readonly handlePageHide = (): void => {
+    void this.pauseForBackground();
+  };
+
+  constructor() {
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    }
+    if (typeof window !== 'undefined') {
+      window.addEventListener('pagehide', this.handlePageHide);
+    }
+  }
+
   async start(): Promise<void> {
     if (this._status() === 'suspended' && this.audioContext) {
       try {
@@ -165,7 +181,25 @@ export class AudioService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    }
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('pagehide', this.handlePageHide);
+    }
     void this.releaseAudioResources();
+  }
+
+  private async pauseForBackground(): Promise<void> {
+    if (this._status() !== 'listening') return;
+    this._status.set('paused');
+    this._errorMessage.set(
+      'Das Mikrofon wurde beim Wechsel in den Hintergrund aus Datenschutz- und Energiespargründen deaktiviert. Tippe zum Fortsetzen erneut auf Mikrofon aktivieren.'
+    );
+    this._measurement.set(null);
+    this._inputLevel.set(0);
+    this.recentFrequencies = [];
+    await this.releaseAudioResources();
   }
 
   private async ensureAudioContextRunning(): Promise<void> {
