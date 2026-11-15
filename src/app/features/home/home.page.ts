@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { AudioService } from '../../core/audio/audio.service';
 import { SettingsService } from '../../core/settings/settings.service';
@@ -198,6 +198,8 @@ import {
                   Mikrofon wird gestartet …
                 } @else if (isListening()) {
                   <span class="stop-icon">■</span> Stimmgerät stoppen
+                } @else if (status() === 'paused' || status() === 'suspended') {
+                  <span class="mic-icon">◉</span> Mikrofon erneut aktivieren
                 } @else {
                   <span class="mic-icon">◉</span> Mikrofon aktivieren
                 }
@@ -272,7 +274,7 @@ export class HomePage {
     if (this.status() === 'requesting') return 'Bitte erlaube den Mikrofonzugriff.';
     if (this.status() === 'unsupported')
       return 'Dein Browser unterstützt die benötigte Audiofunktion nicht.';
-    if (this.status() === 'suspended')
+    if (this.status() === 'suspended' || this.status() === 'paused')
       return this.audio.errorMessage() ?? 'Die Audioverarbeitung wurde pausiert.';
     if (
       this.status() === 'permission-denied' ||
