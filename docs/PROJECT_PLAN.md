@@ -600,3 +600,135 @@ Der Name ist eine Produktentscheidung für die Entwicklung, keine bestätigte ma
 ## 18. Nächster Umsetzungsschritt
 
 Phase 1 vorbereiten und anschließend einen kleinen Audio-Prototyp entwickeln. Die vollständige Tuner-Oberfläche wird erst ausgebaut, wenn die Audioverarbeitung auf Web, Android und iOS nachweislich funktioniert.
+
+
+---
+
+## 19. Web-Veröffentlichung über GitHub Pages
+
+Die produktive Web-App wird kostenlos über **GitHub Pages** aus diesem Repository veröffentlicht.
+
+### Deployment
+
+- GitHub Actions baut die Angular-Produktionsversion.
+- Das Build-Ergebnis wird als Pages-Artefakt hochgeladen und mit den offiziellen GitHub-Pages-Actions veröffentlicht.
+- Deployment erfolgt zunächst bei Änderungen am Branch `main`; Pull Requests führen Build und Tests aus, veröffentlichen aber nicht.
+- Das Repository muss GitHub Pages für die Veröffentlichung über GitHub Actions konfigurieren.
+- Die veröffentlichte URL und der Base-Href werden in der README dokumentiert.
+
+### Angular-Konfiguration
+
+GitHub Pages veröffentlicht ein Projekt standardmäßig unter einer Repository-Unteradresse, beispielsweise:
+
+`https://<owner>.github.io/<repository>/`
+
+Daher muss der Angular-Build den passenden Base-Href erhalten, beispielsweise:
+
+`ng build --configuration production --base-href /Saituno/`
+
+Der tatsächliche Pfad muss aus Owner und Repository-Namen der GitHub-Pages-Adresse abgeleitet und in der Workflow-Konfiguration zentral gepflegt werden.
+
+### Routing und statische Dateien
+
+- Angular-Routing muss mit dem statischen Hosting von GitHub Pages kompatibel sein.
+- Für den MVP wird Hash-Routing (`useHash: true`) bevorzugt, damit direkte Aufrufe und Reloads tiefer Routen nicht auf einen fehlenden Server-Fallback angewiesen sind.
+- Asset-, Manifest-, Service-Worker- und AudioWorklet-URLs müssen auch unter dem Repository-Unterpfad korrekt aufgelöst werden.
+- PWA-Manifest und Service-Worker-Scope müssen den tatsächlichen Deployment-Pfad berücksichtigen.
+- Die Anwendung muss nach Veröffentlichung unter dem GitHub-Pages-Unterpfad vollständig funktionieren; ein Test nur unter `/` reicht nicht aus.
+
+### GitHub Actions – Pages
+
+Der Workflow soll die offiziellen Actions für Pages verwenden:
+
+1. Checkout
+2. Node.js-Version und npm-Cache einrichten
+3. `npm ci`
+4. Linting, Unit-Tests und Produktions-Build
+5. Playwright E2E- und Visual-Regression-Tests
+6. Pages-Artefakt hochladen
+7. Pages-Deployment nach erfolgreichem Build und erfolgreichen Tests
+
+Pull Requests führen die Prüfungen aus, ohne die Live-Seite zu verändern.
+
+---
+
+## 20. GitHub Releases und Android-APK
+
+Zusätzlich zur Web-Veröffentlichung werden künftig versionierte GitHub Releases bereitgestellt. Jedes geeignete Release soll mindestens eine installierbare Android-APK als Download enthalten.
+
+### Release-Auslöser und Versionierung
+
+- Releases werden über versionierte Git-Tags ausgelöst, beispielsweise `v1.0.0`.
+- Semantische Versionierung verwenden: MAJOR.MINOR.PATCH.
+- GitHub Actions baut die Release-Artefakte automatisiert.
+- Der Workflow erstellt einen GitHub Release zum Tag und hängt die erzeugten Dateien an.
+- Release Notes enthalten Version, Änderungen, bekannte Einschränkungen und Installationshinweise.
+- Keine Release-Artefakte aus beliebigen Pull-Request-Builds als offizielle Releases veröffentlichen.
+
+### Android APK
+
+- Android-Release-Build mit Capacitor und Gradle erzeugen.
+- Eine signierte Release-APK als GitHub-Release-Asset bereitstellen.
+- APK-Dateiname enthält Produktname und Version, beispielsweise `saituno-1.0.0-android.apk`.
+- Signatur und Build-Ergebnis vor Veröffentlichung prüfen.
+- SHA-256-Prüfsumme der APK erzeugen und in den Release-Assets oder Release Notes bereitstellen.
+- Installation und Start der APK auf einem Android-Testgerät prüfen.
+
+### Signierung und Secrets
+
+- Für Release-APK eine eigene Android-Release-Keystore-Datei verwenden.
+- Keystore und Passwörter niemals ins Repository einchecken.
+- Keystore und Zugangsdaten ausschließlich als geschützte GitHub Actions Secrets beziehungsweise geeignete geschützte Umgebungs-Secrets speichern.
+- Release-Workflow darf nur bei einem passenden Tag und mit Zugriff auf die benötigten Secrets signieren.
+- Debug-Builds dürfen keine Release-Schlüssel verwenden.
+- Verlust des Keystores vermeiden: sichere, zugriffsbeschränkte Offline-Sicherung der Release-Schlüssel vorsehen.
+
+### Weitere Plattformen
+
+- iOS-Builds können später ergänzt werden. Eine Verteilung außerhalb des App Stores erfordert ein separates Signierungs- und Distributionskonzept.
+- Die Web-App wird weiterhin über GitHub Pages veröffentlicht; sie muss nicht als Release-ZIP verteilt werden.
+- Ein Android App Bundle (`.aab`) kann ergänzend erzeugt werden, falls später eine Veröffentlichung im Google Play Store geplant wird. Für direkte Downloads aus GitHub Releases ist die APK das primäre Artefakt.
+
+### Release-Checkliste
+
+- [ ] Versionsnummer und Git-Tag stimmen überein.
+- [ ] CI-Tests und Visual Regression Tests sind erfolgreich.
+- [ ] Web-Produktionsbuild ist erfolgreich.
+- [ ] Android-Release-APK wurde erstellt.
+- [ ] APK ist mit dem vorgesehenen Release-Keystore signiert.
+- [ ] Signaturprüfung ist erfolgreich.
+- [ ] SHA-256-Prüfsumme wurde erzeugt.
+- [ ] APK wurde auf einem Android-Gerät installiert und gestartet.
+- [ ] Release Notes und Installationshinweise sind vorhanden.
+- [ ] GitHub Release enthält die APK als Download.
+
+---
+
+## 21. Aktualisierte CI/CD-Zielarchitektur
+
+GitHub Actions übernimmt drei getrennte Aufgabenbereiche:
+
+| Workflow | Auslöser | Aufgaben |
+|---|---|---|
+| CI | Pull Request und Push auf `main` | Installieren, Linting, Unit-Tests, Playwright E2E, Visual Regression, Web-Build |
+| GitHub Pages | Erfolgreicher Push auf `main` | Produktionsbuild mit korrektem Base-Href und Deployment |
+| Release | Push eines Versions-Tags wie `v1.0.0` | Release-Build, APK-Signierung, Prüfsumme und GitHub Release |
+
+Die Workflows sollen gemeinsame Schritte nach Möglichkeit in wiederverwendbaren Actions oder Composite Actions kapseln. Berechtigungen werden nach dem Least-Privilege-Prinzip vergeben. Der Pages-Workflow benötigt die für Pages vorgesehenen Deployment-Berechtigungen; der Release-Workflow erhält Zugriff auf Signierungs-Secrets nur für vertrauenswürdige Tag-Builds.
+
+---
+
+## 22. Ergänzte Definition of Done
+
+Zusätzlich zu den bisherigen MVP-Abnahmekriterien gilt:
+
+- [ ] Angular-Produktionsbuild wird automatisiert über GitHub Actions erstellt.
+- [ ] Web-App ist über GitHub Pages öffentlich erreichbar.
+- [ ] Angular Base-Href, Routing, Assets, PWA-Manifest und Service Worker funktionieren unter dem GitHub-Pages-Unterpfad.
+- [ ] Pull Requests veröffentlichen keine ungeprüften Änderungen auf GitHub Pages.
+- [ ] Ein versionierter Git-Tag kann einen GitHub Release auslösen.
+- [ ] Der Release enthält eine signierte, installierbare Android-APK.
+- [ ] APK-Signierung erfolgt mit geschützten GitHub Actions Secrets.
+- [ ] Keystore und Passwörter sind nicht im Repository enthalten.
+- [ ] SHA-256-Prüfsumme der APK wird veröffentlicht.
+- [ ] APK wurde vor Veröffentlichung auf einem Android-Gerät installiert und gestartet.
