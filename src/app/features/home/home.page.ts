@@ -59,7 +59,7 @@ import {
                   (change)="selectInstrument($event)"
                 >
                   @for (instrument of instruments; track instrument.id) {
-                    <option [value]="instrument.id">{{ instrument.name }}</option>
+                    <option [value]="instrument.id" [selected]="instrument.id === selectedInstrumentId()">{{ instrument.name }}</option>
                   }
                 </select>
               </label>
@@ -72,7 +72,7 @@ import {
                   (change)="selectTuning($event)"
                 >
                   @for (tuning of availableTunings(); track tuning.id) {
-                    <option [value]="tuning.id">{{ tuning.name }}</option>
+                    <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">{{ tuning.name }}</option>
                   }
                 </select>
               </label>
@@ -217,11 +217,6 @@ import {
   styleUrl: './home.page.scss'
 })
 export class HomePage {
-  constructor() {
-    console.log('SAITUNO_HOME_SETTINGS:' + JSON.stringify(this.settings.settings()));
-    console.log('SAITUNO_HOME_SELECTED:' + this.selectedInstrumentId());
-  }
-
   private readonly audio = inject(AudioService);
   private readonly settings = inject(SettingsService);
   readonly instruments = INSTRUMENTS;
