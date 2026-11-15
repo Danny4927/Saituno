@@ -4,7 +4,12 @@ import { centsFromTarget, closestGuitarString, GUITAR_STANDARD } from './guitar-
 describe('guitar standard tuning helpers', () => {
   it('defines six strings from low E2 to high E4', () => {
     expect(GUITAR_STANDARD.map((string) => string.id)).toEqual([
-      'E2', 'A2', 'D3', 'G3', 'B3', 'E4'
+      'E2',
+      'A2',
+      'D3',
+      'G3',
+      'B3',
+      'E4'
     ]);
   });
 

@@ -18,8 +18,13 @@ export const GUITAR_STANDARD: readonly TuningString[] = [
 ] as const;
 
 export function centsFromTarget(frequency: number, targetFrequency: number): number | null {
-  if (!Number.isFinite(frequency) || frequency <= 0 ||
-      !Number.isFinite(targetFrequency) || targetFrequency <= 0) return null;
+  if (
+    !Number.isFinite(frequency) ||
+    frequency <= 0 ||
+    !Number.isFinite(targetFrequency) ||
+    targetFrequency <= 0
+  )
+    return null;
   return 1200 * Math.log2(frequency / targetFrequency);
 }
 
