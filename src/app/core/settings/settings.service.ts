@@ -27,19 +27,19 @@ export class SettingsService {
   async load(): Promise<void> {
     let value: string | null = null;
 
-    if (Capacitor.isNativePlatform()) {
-      try {
-        value = (await Preferences.get({ key: STORAGE_KEY })).value;
-      } catch {
-        // Fall back to WebView localStorage if the native bridge is unavailable.
-      }
-    }
-
-    if (!value && typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       try {
         value = window.localStorage.getItem(STORAGE_KEY);
       } catch {
-        // Storage can be unavailable in private browsing or a restricted WebView.
+        // Continue to native Preferences when WebView storage is unavailable.
+      }
+    }
+
+    if (!value && Capacitor.isNativePlatform()) {
+      try {
+        value = (await Preferences.get({ key: STORAGE_KEY })).value;
+      } catch {
+        // Keep defaults if both storage backends are unavailable.
       }
     }
 
