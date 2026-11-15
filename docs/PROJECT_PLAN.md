@@ -599,7 +599,7 @@ Der Name ist eine Produktentscheidung für die Entwicklung, keine bestätigte ma
 
 ## 18. Nächster Umsetzungsschritt
 
-Phase 1 vorbereiten und anschließend einen kleinen Audio-Prototyp entwickeln. Die vollständige Tuner-Oberfläche wird erst ausgebaut, wenn die Audioverarbeitung auf Web, Android und iOS nachweislich funktioniert.
+Phase 1 ist umgesetzt. Als Nächstes folgt Phase 2: ein kleiner Audio-Prototyp mit reproduzierbaren Testsignalen. Die vollständige Tuner-Oberfläche wird erst ausgebaut, wenn die Audioverarbeitung auf Web, Android und iOS nachweislich funktioniert.
 
 
 ---
@@ -732,3 +732,48 @@ Zusätzlich zu den bisherigen MVP-Abnahmekriterien gilt:
 - [ ] Keystore und Passwörter sind nicht im Repository enthalten.
 - [ ] SHA-256-Prüfsumme der APK wird veröffentlicht.
 - [ ] APK wurde vor Veröffentlichung auf einem Android-Gerät installiert und gestartet.
+
+
+---
+
+## 23. Umsetzungsstand Phase 1 (15.11.2026)
+
+**Status: abgeschlossen und durch GitHub Actions verifiziert.**
+
+Implementierung auf Branch `phase-1/project-foundation`, Pull Request [#1](https://github.com/Danny4927/Saituno/pull/1).
+
+### Gelieferte Grundlage
+
+- Angular 22.2.6 mit Standalone Components und Angular Signals
+- Ionic 9.0.11 und Capacitor 8.6.2
+- TypeScript 6.0.3 und Node.js 26
+- Striktes TypeScript-/Angular-Template-Checking
+- Hash-Routing für GitHub Pages
+- PWA-Manifest und Angular Service Worker
+- Capacitor-Projekte für Android und iOS unter `android/` und `ios/`
+- README, MIT-Lizenz, .gitignore und npm-Lockfile
+
+### Tests und Qualitätssicherung
+
+- Vitest für Unit-Tests
+- Playwright für Browser-E2E-Tests und Screenshot-basierte Visual Regression
+- GitHub Actions für Formatprüfung, npm Audit, Unit-Tests, Produktionsbuild und Playwright
+- npm Audit nach Aktualisierung von Vitest: keine bekannten Sicherheitslücken
+- Initialer Screenshot-Baseline ist im Repository vorhanden
+
+### Verifizierte Abnahme
+
+- [x] `npm ci` erfolgreich
+- [x] Prettier-Prüfung erfolgreich
+- [x] Vitest: 2 Tests bestanden
+- [x] Angular-Produktionsbuild erfolgreich
+- [x] Playwright E2E- und Screenshot-Test erfolgreich
+- [x] npm Audit: 0 bekannte Sicherheitslücken
+- [x] Capacitor Android-Projekt erfolgreich generiert
+- [x] Capacitor iOS-Projekt erfolgreich generiert
+- [x] Native Scaffold Workflow erfolgreich
+- [x] CI Workflow erfolgreich
+
+### Bewusste Abgrenzung
+
+Die Startansicht ist aktuell ein UI-Grundgerüst und noch kein nutzbares Stimmgerät. Mikrofonzugriff, AudioWorklet, Pitch Detection und die eigentliche Tuner-Oberfläche gehören zu Phase 2 und den folgenden Phasen. GitHub Pages Deployment und Release-Automatisierung sind ebenfalls noch nicht eingerichtet.
