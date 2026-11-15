@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('renders the Saituno tuner and visual baseline', async ({ page }) => {
+test('renders the Saituno tuner and visual baseline', async ({ page }, testInfo) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Saituno/);
   await expect(page.getByRole('heading', { name: /Stimm dein Instrument/i })).toBeVisible();
@@ -12,7 +12,9 @@ test('renders the Saituno tuner and visual baseline', async ({ page }) => {
   await expect(page.getByTestId('instrument-select')).toHaveValue('guitar');
   await expect(page.getByTestId('tuning-select')).toHaveValue('guitar-standard');
   await expect(page.getByTestId('string-E2')).toBeVisible();
-  await expect(page).toHaveScreenshot('saituno-tuner-interface.png', { animations: 'disabled' });
+  if (testInfo.project.name === 'chromium') {
+    await expect(page).toHaveScreenshot('saituno-tuner-interface.png', { animations: 'disabled' });
+  }
 });
 
 test('allows switching between automatic and manual string selection', async ({ page }) => {
@@ -60,8 +62,12 @@ test('shows a helpful message when microphone permission is denied', async ({ pa
   await expect(page.getByRole('status')).toContainText('Mikrofonzugriff wurde verweigert');
 });
 
-test('receives microphone samples through the AudioWorklet', async ({ page, context }) => {
-  await context.grantPermissions(['microphone']);
+test('receives microphone samples through the AudioWorklet', async ({ page, context, browserName }) => {
+  // Firefox uses its native fake-device preferences; Playwright's
+  // grantPermissions('microphone') is not supported by Firefox.
+  if (browserName === 'chromium') {
+    await context.grantPermissions(['microphone']);
+  }
   await page.goto('/');
   await page.getByTestId('tuner-toggle').click();
   await expect(page.getByTestId('pitch-readout')).toBeVisible({ timeout: 10_000 });
