@@ -21,7 +21,7 @@ import {
     <ion-content [fullscreen]="true">
       <main class="app-shell">
         <header class="topbar">
-          <a class="brand" href="/" aria-label="Saituno Startseite">
+          <a class="brand" href="./" aria-label="Saituno Startseite">
             <span class="brand-mark" aria-hidden="true">S</span><span>Saituno</span>
           </a>
           <span class="privacy-label"><span class="privacy-dot"></span> LOKAL & PRIVAT</span>
