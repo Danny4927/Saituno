@@ -142,7 +142,7 @@ describe('SettingsService', () => {
 
     expect(service.settings()).toEqual(saved);
   });
-  it('prefers the current WebView value over a stale native preference value', async () => {
+  it('prefers native Preferences over stale WebView localStorage', async () => {
     const webValue = {
       instrumentId: 'bass',
       tuningId: 'bass-5-standard',
@@ -162,7 +162,7 @@ describe('SettingsService', () => {
     const service = new SettingsService();
     await service.load();
 
-    expect(service.settings()).toEqual(webValue);
-    expect(Preferences.get).not.toHaveBeenCalled();
+    expect(service.settings()).toEqual(DEFAULT_SETTINGS);
+    expect(Preferences.get).toHaveBeenCalledWith({ key: 'saituno.settings.v1' });
   });
 });
