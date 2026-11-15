@@ -10,7 +10,7 @@
  * @returns {{ frequency: number, confidence: number, rms: number } | null}
  */
 export function estimatePitch(samples, sampleRate, options = {}) {
-  const minFrequency = options.minFrequency ?? 35;
+  const minFrequency = options.minFrequency ?? 25;
   const maxFrequency = options.maxFrequency ?? 1500;
   const threshold = options.threshold ?? 0.15;
   const minRms = options.minRms ?? 0.004;
