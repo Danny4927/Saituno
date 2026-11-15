@@ -219,6 +219,7 @@ import {
 export class HomePage {
   constructor() {
     console.log('SAITUNO_HOME_SETTINGS:' + JSON.stringify(this.settings.settings()));
+    console.log('SAITUNO_HOME_SELECTED:' + this.selectedInstrumentId());
   }
 
   private readonly audio = inject(AudioService);
