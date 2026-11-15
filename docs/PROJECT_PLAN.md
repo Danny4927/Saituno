@@ -3,7 +3,7 @@
 **Produkt:** Saituno  
 **Untertitel:** Open Source Instrument Tuner  
 **Zielplattformen:** Web, Android und iOS  
-**Projektstatus:** Planung / MVP-Vorbereitung
+**Projektstatus:** Phase 1 abgeschlossen; Phase 2 in Umsetzung
 
 ---
 
@@ -38,7 +38,7 @@ Saituno ist eine moderne, minimalistische und vollständig clientseitige Anwendu
 | E2E und Visual Regression | Playwright | Browser- und visuelle Regressionstests |
 | CI/CD | GitHub Actions | Automatisierte Prüfungen und Builds |
 
-Die genannten Versionen sind die Ziel-Major-Versionen aus der Planungsphase. Vor Projektinitialisierung müssen die dann aktuellen stabilen Patch-Versionen und offiziellen Kompatibilitätsmatrizen geprüft werden. Keine Release Candidates oder Betaversionen für produktive Abhängigkeiten verwenden. Node.js 24 LTS verwenden, sofern es von der gewählten Angular-Version unterstützt wird. Abhängigkeiten über Lockfile fixieren.
+Die implementierten und über Lockfile fixierten Versionen stehen in `package.json`. Vor größeren Versionsupdates sind die offiziellen Kompatibilitätsmatrizen zu prüfen. Keine Release Candidates oder Betaversionen für produktive Abhängigkeiten verwenden. Node.js 26 ist für die aktuell verwendete Angular-Version eingerichtet.
 
 **Rust wird im MVP nicht eingesetzt.** Die zusätzliche Build- und Integrationskomplexität bietet für den geplanten Umfang zunächst keinen ausreichenden Vorteil.
 
