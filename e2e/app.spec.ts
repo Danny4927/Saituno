@@ -78,7 +78,7 @@ test('receives microphone samples through the AudioWorklet', async ({ page, cont
 test('persists instrument, tuning and string selection after reload', async ({ page }) => {
   const storageReads: string[] = [];
   page.on('console', (message) => {
-    if (message.text().startsWith('SAITUNO_STORAGE_READ:')) {
+    if (message.text().startsWith('SAITUNO_')) {
       storageReads.push(message.text());
     }
   });
