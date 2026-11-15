@@ -59,7 +59,7 @@ import { APP_NAME, APP_TAGLINE } from '../../shared/app-info';
               <p class="preview-caption">
                 Ziel {{ result.targetFrequency.toFixed(2) }} Hz
                 <span>·</span>
-                {{ result.confidence * 100 | number: '1.0-0' }} % Confidence
+                {{ (result.confidence * 100).toFixed(0) }} % Confidence
               </p>
             } @else {
               <div class="note-display" data-testid="no-pitch">
