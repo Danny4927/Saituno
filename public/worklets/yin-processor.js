@@ -81,7 +81,7 @@ export function estimatePitch(samples, sampleRate, options = {}) {
     Math.abs(denominator) > 1e-12 ? 0.5 * (left - right) / denominator : 0;
   const refinedTau = selectedTau + Math.max(-1, Math.min(1, correction));
   const frequency = sampleRate / refinedTau;
-  const confidence = Math.max(0, Math.min(1, 1 - center));
+  const confidence = Math.max(0, Math.min(1, 1 - normalized[selectedTau]));
 
   if (
     !Number.isFinite(frequency) ||
