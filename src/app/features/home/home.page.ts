@@ -1,5 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular';
 import { APP_NAME, APP_TAGLINE } from '../../shared/app-info';
 
 @Component({
