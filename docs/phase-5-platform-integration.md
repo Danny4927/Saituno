@@ -7,7 +7,7 @@ Phase 5 hardens Saituno for repeat use as a web app or a Capacitor app.
 ### Local settings
 
 - Persist instrument, tuning, selection mode and manually selected string through @capacitor/preferences.
-- Use native Preferences storage on Android/iOS and the plugin's local web implementation in browsers.
+- Use browser localStorage for the web app and native Preferences storage on Android/iOS.
 - Load and validate stored settings before bootstrapping the Angular application.
 - Fall back to safe defaults if storage is unavailable or contains outdated/invalid values.
 - Never store microphone samples or pitch measurements.
