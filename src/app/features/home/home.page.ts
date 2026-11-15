@@ -58,7 +58,10 @@ import {
                   (change)="selectInstrument($event)"
                 >
                   @for (instrument of instruments; track instrument.id) {
-                    <option [value]="instrument.id" [selected]="instrument.id === selectedInstrumentId()">
+                    <option
+                      [value]="instrument.id"
+                      [selected]="instrument.id === selectedInstrumentId()"
+                    >
                       {{ instrument.name }}
                     </option>
                   }
