@@ -71,10 +71,7 @@ export class AudioService implements OnDestroy {
         this.handleWorkletMessage(event.data);
       };
       this.worklet.onprocessorerror = () => {
-        this._errorMessage.set('Die Audioverarbeitung wurde unerwartet beendet.');
-        this._status.set('error');
-        void this.stop();
-        this._status.set('error');
+        void this.handleProcessorError();
       };
 
       this.source.connect(this.worklet);
@@ -101,6 +98,12 @@ export class AudioService implements OnDestroy {
 
   ngOnDestroy(): void {
     void this.releaseAudioResources();
+  }
+
+  private async handleProcessorError(): Promise<void> {
+    this._errorMessage.set('Die Audioverarbeitung wurde unerwartet beendet.');
+    await this.releaseAudioResources();
+    this._status.set('error');
   }
 
   private handleWorkletMessage(message: WorkletMeasurementMessage): void {
