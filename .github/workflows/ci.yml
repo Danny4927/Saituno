@@ -6,6 +6,7 @@ on:
       - main
       - 'phase-1/**'
       - 'phase-2/**'
+      - 'phase-3/**'
   pull_request:
     branches:
       - main
@@ -49,7 +50,7 @@ jobs:
         run: |
           if [ "$GITHUB_EVENT_NAME" = "push" ] || [ "$PR_HEAD_REPOSITORY" = "$GITHUB_REPOSITORY" ]; then
             git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config user.email "41898282+users.noreply.github.com"
             git add -A
             if ! git diff --cached --quiet; then
               git commit -m "chore: format sources and lock dependencies"
@@ -81,15 +82,15 @@ jobs:
           PR_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
           SNAPSHOT_DIR="e2e/app.spec.ts-snapshots"
-          SNAPSHOT_FILE="$SNAPSHOT_DIR/saituno-audio-prototype-chromium-linux.png"
+          SNAPSHOT_FILE="$SNAPSHOT_DIR/saituno-tuner-interface-chromium-linux.png"
           if [ ! -f "$SNAPSHOT_FILE" ]; then
             npm run test:e2e -- --update-snapshots
             if [ "$GITHUB_EVENT_NAME" = "push" ] || [ "$PR_HEAD_REPOSITORY" = "$GITHUB_REPOSITORY" ]; then
               git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git config user.email "41898282+users.noreply.github.com"
               git add "$SNAPSHOT_DIR"
               if ! git diff --cached --quiet; then
-                git commit -m "test: add initial Playwright visual baseline"
+                git commit -m "test: add Phase 3 visual regression baseline"
                 git pull --rebase origin "$TARGET_BRANCH"
                 git push origin "HEAD:$TARGET_BRANCH"
               fi
