@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - 'phase-1/**'
+      - 'phase-1/**'\n      - 'phase-2/**'
   pull_request:
     branches:
       - main
