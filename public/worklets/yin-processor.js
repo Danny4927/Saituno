@@ -77,8 +77,7 @@ export function estimatePitch(samples, sampleRate, options = {}) {
   const center = differences[selectedTau];
   const right = differences[selectedTau + 1] ?? center;
   const denominator = left - 2 * center + right;
-  const correction =
-    Math.abs(denominator) > 1e-12 ? 0.5 * (left - right) / denominator : 0;
+  const correction = Math.abs(denominator) > 1e-12 ? (0.5 * (left - right)) / denominator : 0;
   const refinedTau = selectedTau + Math.max(-1, Math.min(1, correction));
   const frequency = sampleRate / refinedTau;
   const confidence = Math.max(0, Math.min(1, 1 - normalized[selectedTau]));
@@ -132,10 +131,7 @@ if (typeof AudioWorkletProcessor !== 'undefined') {
           this.decimationCount = 0;
           this.decimationSum = 0;
 
-          if (
-            this.writeIndex === 0 ||
-            this.samplesSinceAnalysis >= HOP_SIZE
-          ) {
+          if (this.writeIndex === 0 || this.samplesSinceAnalysis >= HOP_SIZE) {
             this.samplesSinceAnalysis = 0;
             const ordered = new Float32Array(WINDOW_SIZE);
             const firstPart = WINDOW_SIZE - this.writeIndex;
