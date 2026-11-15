@@ -26,11 +26,12 @@ export class SettingsService {
 
   async load(): Promise<void> {
     try {
-      const value = Capacitor.isNativePlatform()
+      let value = Capacitor.isNativePlatform()
         ? (await Preferences.get({ key: STORAGE_KEY })).value
-        : typeof window !== 'undefined'
-          ? window.localStorage.getItem(STORAGE_KEY)
-          : null;
+        : null;
+      if (!value && typeof window !== 'undefined') {
+        value = window.localStorage.getItem(STORAGE_KEY);
+      }
       if (!value) return;
 
       const parsed: unknown = JSON.parse(value);
@@ -86,10 +87,11 @@ export class SettingsService {
     this._settings.set(validated);
     try {
       const value = JSON.stringify(validated);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEY, value);
+      }
       if (Capacitor.isNativePlatform()) {
         await Preferences.set({ key: STORAGE_KEY, value });
-      } else if (typeof window !== 'undefined') {
-        window.localStorage.setItem(STORAGE_KEY, value);
       }
     } catch {
       // Persistence is best-effort; current-session settings still work.
