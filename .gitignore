@@ -15,4 +15,10 @@ android/**/build/
 ios/Pods/
 ios/build/
 ios/DerivedData/
-\n# Signing material and provisioning credentials\n*.jks\n*.keystore\n*.p12\n*.mobileprovision\n*.provisionprofile\n
+
+# Signing material and provisioning credentials
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+*.provisionprofile
