@@ -35,27 +35,26 @@ export class SettingsService {
   }
 
   async load(): Promise<void> {
-    let value: string | null = null;
+    // Browser settings are restored synchronously in the constructor. Only
+    // native platforms need the asynchronous Preferences bridge.
+    if (!Capacitor.isNativePlatform()) return;
 
-    if (typeof window !== 'undefined') {
+    let value: string | null = null;
+    try {
+      value = (await Preferences.get({ key: STORAGE_KEY })).value;
+    } catch {
+      // Fall back to WebView localStorage when the native bridge is unavailable.
+    }
+
+    if (!value && typeof window !== 'undefined') {
       try {
         value = window.localStorage.getItem(STORAGE_KEY);
       } catch {
-        // Continue to native Preferences when WebView storage is unavailable.
+        // Keep the in-memory defaults when both storage backends are unavailable.
       }
     }
 
-    if (!value && Capacitor.isNativePlatform()) {
-      try {
-        value = (await Preferences.get({ key: STORAGE_KEY })).value;
-      } catch {
-        // Keep defaults if both storage backends are unavailable.
-      }
-    }
-
-    if (!value) return;
-
-    this.restore(value);
+    if (value) this.restore(value);
   }
 
   private restore(value: string): void {
