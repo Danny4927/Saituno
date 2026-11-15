@@ -41,6 +41,11 @@ export class AudioService implements OnDestroy {
     this.recentFrequencies = [];
 
     try {
+      // Create and resume the context synchronously from the user's gesture
+      // before awaiting the browser's microphone permission prompt.
+      this.audioContext = new AudioContext({ latencyHint: 'interactive' });
+      await this.audioContext.resume();
+
       this.stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: false,
@@ -50,7 +55,6 @@ export class AudioService implements OnDestroy {
         video: false
       });
 
-      this.audioContext = new AudioContext({ latencyHint: 'interactive' });
       await this.audioContext.audioWorklet.addModule(
         new URL('worklets/yin-processor.js', document.baseURI)
       );
@@ -77,7 +81,6 @@ export class AudioService implements OnDestroy {
       this.source.connect(this.worklet);
       this.worklet.connect(this.silentGain);
       this.silentGain.connect(this.audioContext.destination);
-      await this.audioContext.resume();
       this._status.set('listening');
     } catch (error) {
       await this.releaseAudioResources();
