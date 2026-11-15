@@ -14,7 +14,6 @@ on:
     paths:
       - 'package.json'
       - 'capacitor.config.ts'
-      - 'src/**'
       - '.github/workflows/native-scaffold.yml'
   workflow_dispatch:
 
