@@ -254,7 +254,9 @@ h1 span {
   font-size: 13px;
   font-weight: 750;
   cursor: pointer;
-  transition: filter 120ms ease, transform 120ms ease;
+  transition:
+    filter 120ms ease,
+    transform 120ms ease;
 }
 
 .tuner-button:hover:not(:disabled) {

@@ -13,11 +13,7 @@ function sineWave(
   );
 }
 
-function harmonicSignal(
-  fundamental: number,
-  sampleRate = 12_000,
-  length = 4096
-): Float32Array {
+function harmonicSignal(fundamental: number, sampleRate = 12_000, length = 4096): Float32Array {
   return Float32Array.from({ length }, (_, index) => {
     const phase = (2 * Math.PI * fundamental * index) / sampleRate;
     return 0.12 * Math.sin(phase) + 0.65 * Math.sin(2 * phase) + 0.2 * Math.sin(3 * phase);
