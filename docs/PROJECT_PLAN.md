@@ -3,7 +3,7 @@
 **Produkt:** Saituno  
 **Untertitel:** Open Source Instrument Tuner  
 **Zielplattformen:** Web, Android und iOS  
-**Projektstatus:** Phase 1–3 gemerged; Phase 4 Instrument- und Stimmungsauswahl implementiert
+**Projektstatus (15.11.2026):** Phasen 1–5 gemerged; Phase 6 Release-Vorbereitung als nächster Schritt
 
 ---
 
@@ -479,27 +479,34 @@ Zusätzlich sind reale Instrumente und Mikrofone erforderlich. Mindestens eine G
 
 ### Phase 5 – Plattformintegration
 
-- Capacitor-Konfiguration vervollständigen.
-- Mikrofonberechtigungen.
-- Offline-Funktionalität.
-- Lokale Speicherung.
-- Audio-Unterbrechungen behandeln.
-- Plattformtests durchführen.
+**Status: Implementiert und gemerged; physische Geräteabnahme teilweise offen.**
 
-**Abnahme:** Die App funktioniert auf Web, Android und iOS auch ohne Internetverbindung.
+- [x] Capacitor-Konfiguration und Android-/iOS-Projekte vorhanden.
+- [x] Mikrofonberechtigungen für Browser und native Projekte vorbereitet.
+- [x] Offline-App-Shell über Angular Service Worker.
+- [x] Lokale Speicherung der Tuner-Einstellungen (Web Storage / Capacitor Preferences).
+- [x] Audioaufnahme bei Backgrounding/Pagehide stoppen; erneute Aktivierung nur nach Nutzeraktion.
+- [x] Chromium- und Firefox-E2E-Abdeckung für Persistenz und Audio-Lifecycle.
+- [ ] Android- und iOS-Geräteabnahme mit Berechtigungs-, Sperrbildschirm- und Unterbrechungstests.
+- [ ] Offline-Reload und Mikrofon-Reaktivierung auf physischen Geräten bestätigen.
 
-### Phase 6 – Release
+**Abnahme:** Implementierung abgeschlossen. Plattformübergreifende Abnahme bleibt bis zu dokumentierten physischen Gerätetests offen.
 
-- Performance-Optimierung.
-- Accessibility-Prüfung.
-- Dark- und Light-Mode finalisieren.
-- App-Icons und Splashscreens.
-- Dokumentation.
-- Lizenz und Open-Source-Repository.
-- Web-Deployment.
-- Android- und iOS-Release-Builds.
+### Phase 6 – Release-Vorbereitung
 
-**Abnahme:** Ein reproduzierbarer Release-Kandidat liegt vor.
+**Status: Als nächster Schritt geplant.**
+
+- [ ] Barrierefreiheit und Bedienbarkeit mit Tastatur/Screenreader prüfen.
+- [ ] Kontrast, Dark-/Light-Mode und responsive Ansichten systematisch abnehmen.
+- [ ] App-Icons, Splashscreens und Metadaten finalisieren.
+- [ ] Web-Deployment und PWA-Offline-Verhalten prüfen.
+- [ ] Reproduzierbare Release-Builds für Android und iOS vorbereiten.
+- [ ] Android-Signierung und Release-Secrets sicher konfigurieren (Keystore nicht einchecken).
+- [ ] Release-Workflow und Versions-/Changelog-Prozess einrichten.
+- [ ] Lizenz- und Third-Party-Hinweise prüfen.
+- [ ] Bekannte Plattform- und Audioeinschränkungen dokumentieren.
+
+**Abnahme:** Ein reproduzierbarer Release-Kandidat liegt vor; physische Gerätematrix und Audio-Messwerte sind dokumentiert.
 
 ## 13. Nicht Bestandteil des MVP
 
@@ -607,7 +614,7 @@ Der Name ist eine Produktentscheidung für die Entwicklung, keine bestätigte ma
 
 ## 18. Nächster Umsetzungsschritt
 
-Phase 1 und Phase 2 sind gemerged. Phase 3 implementiert die eigentliche Tuner-Oberfläche mit Cent-Anzeige, Stimmstatus sowie automatischer und manueller Saitenauswahl für Gitarre E Standard. Phase 4 ergänzt datengetriebene Instrument- und Stimmungskonfigurationen für Gitarre, Ukulele und Bass. Als Nächstes folgt Phase 5 mit Plattformintegration, Offline-Verhalten, lokalen Einstellungen und Audio-Lifecycle-Tests. Reale Gerätetests und Messungen der Audio-Genauigkeit/Latenz aus Phase 2 bleiben plattformübergreifend offen.
+Phasen 1–5 sind gemerged. Als Nächstes folgt Phase 6 mit Release-Vorbereitung, Accessibility-Abnahme, Release-Automatisierung und plattformbezogenen Checklisten. Die Implementierung in Phase 5 ist vorhanden; physische Android-/iOS-Tests, Browsermessungen mit kalibrierter Referenz sowie Audio-Genauigkeit und Latenz bleiben offen und dürfen nicht als automatisiert abgenommen gelten.
 
 
 ---
@@ -876,3 +883,23 @@ Die verbindliche Testmatrix steht in `docs/PHASE_2_TEST_MATRIX.md`; technische D
 - [ ] Reale Stimmtests für alle Instrumente und Stimmungen.
 - [ ] Genauigkeit und Reaktionszeit auf echten Geräten dokumentieren.
 - [ ] Android- und iOS-Audio-Lifecycle testen.
+
+---
+
+## 26. Umsetzungsstand Phase 5 – Plattformintegration (15.11.2026)
+
+**Status: Implementierung gemerged; reale Plattformabnahme offen.**
+
+- Einstellungen für Instrument, Stimmung, Auswahlmodus und manuelle Saite werden lokal gespeichert.
+- Web verwendet localStorage; native Plattformen nutzen Capacitor Preferences mit WebView-Fallback.
+- Gespeicherte Werte werden validiert; ungültige oder nicht verfügbare Storage-Werte führen zu sicheren Standardwerten.
+- Bei Backgrounding/Pagehide werden Mikrofon-Tracks gestoppt, AudioContext geschlossen und Messwerte zurückgesetzt.
+- Beim Zurückkehren ist eine bewusste Nutzeraktion zur Reaktivierung erforderlich.
+- Service Worker cached App-Shell und AudioWorklet-Ressource.
+- Unit- und Playwright-Tests prüfen Persistenz und Background-Pause in Chromium und Firefox.
+
+**Offene Abnahme:** Physische Android-/iOS-Tests (Berechtigungen, App-Wechsel, Sperrbildschirm, Audio-Unterbrechungen), Web-Offline-Reload auf Endgeräten und kalibrierte Messung von Genauigkeit/Latenz.
+
+## 27. Phase 6 – Release-Vorbereitung: Abnahmekriterien
+
+Die konkrete Checkliste wird in `docs/PHASE_6_RELEASE_CHECKLIST.md` gepflegt. Kein Release darf Audioqualität, Store-/Markenfreigabe oder physische Plattformtests als erfolgreich bezeichnen, solange die jeweiligen Nachweise fehlen.
