@@ -142,4 +142,28 @@ describe('SettingsService', () => {
 
     expect(service.settings()).toEqual(saved);
   });
+  it('prefers the current WebView value over a stale native preference value', async () => {
+    const webValue = {
+      instrumentId: 'bass',
+      tuningId: 'bass-5-standard',
+      selectionMode: 'manual',
+      manualStringId: 'B0'
+    };
+    vi.mocked(Preferences.get).mockResolvedValue({
+      value: JSON.stringify(DEFAULT_SETTINGS)
+    });
+    vi.stubGlobal('window', {
+      localStorage: {
+        getItem: vi.fn(() => JSON.stringify(webValue)),
+        setItem: vi.fn()
+      }
+    });
+
+    const service = new SettingsService();
+    await service.load();
+
+    expect(service.settings()).toEqual(webValue);
+    expect(Preferences.get).not.toHaveBeenCalled();
+  });
+
 });
