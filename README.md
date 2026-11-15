@@ -4,7 +4,7 @@
 
 Saituno is an open-source, privacy-first instrument tuner. The application is designed to run locally in the browser or as a native Android/iOS app. There is no backend, account system, analytics, advertising or audio upload.
 
-> **Project status:** Phase 2 audio prototype. The browser version can request microphone access and estimate monophonic pitch locally. Accuracy and latency measurements on real instruments and native devices are still pending.
+> **Project status:** Phase 3 tuner interface implemented. The current interactive tuner supports automatic and manual string selection for six-string guitar in E standard tuning. Phase 2 real-device accuracy and latency measurements remain pending.
 
 ## Technology
 
