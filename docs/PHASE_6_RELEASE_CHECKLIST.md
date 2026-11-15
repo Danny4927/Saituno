@@ -67,11 +67,11 @@ Use a signal generator or calibrated reference. A phone speaker alone is not a s
 - [ ] APK signature is verified and SHA-256 checksum is generated.
 - [ ] APK is installed and smoke-tested on a physical Android device.
 - [x] iOS Simulator build is automated; App Store/TestFlight signing and distribution remain dependent on Apple credentials.
-- [ ] Native permission descriptions accurately explain microphone use and local-only processing.
+- [x] iOS microphone usage description explains local-only processing; Android requests only the runtime recording permission.
 
 ## 6. Open-source and release hygiene
 
-- [ ] README accurately reflects the current implementation and known limitations.
+- [x] README reflects the current implementation, build commands, release process and known limitations.
 - [ ] MIT license and third-party notices are present and reviewed.
 - [ ] Changelog and release notes list user-visible changes and known limitations.
 - [ ] Version tag, app version and release asset names match.
