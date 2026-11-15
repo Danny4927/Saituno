@@ -56,6 +56,13 @@ jobs:
           fi
           npx cap sync
 
+      - name: Ensure iOS microphone usage description
+        run: |
+          PLIST="ios/App/App/Info.plist"
+          DESCRIPTION="Saituno benötigt das Mikrofon, um Töne lokal zu erkennen. Audiodaten werden nicht aufgezeichnet oder übertragen."
+          /usr/libexec/PlistBuddy -c "Set :NSMicrophoneUsageDescription '$DESCRIPTION'" "$PLIST" 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c "Add :NSMicrophoneUsageDescription string '$DESCRIPTION'" "$PLIST"
+
       - name: Commit generated native projects
         run: |
           git config user.name "github-actions[bot]"
