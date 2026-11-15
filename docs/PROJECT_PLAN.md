@@ -496,7 +496,7 @@ Zusätzlich sind reale Instrumente und Mikrofone erforderlich. Mindestens eine G
 
 **Status: Als nächster Schritt geplant.**
 
-- [ ] Barrierefreiheit und Bedienbarkeit mit Tastatur/Screenreader prüfen.
+- [x] Erste Accessibility-Verbesserungen: semantische Beschriftungen, Tastaturfokus, reduzierte Live-Updates und Kontrastkorrekturen; weitere Screenreader-/WCAG-Prüfung bleibt offen.
 - [ ] Kontrast, Dark-/Light-Mode und responsive Ansichten systematisch abnehmen.
 - [ ] App-Icons, Splashscreens und Metadaten finalisieren.
 - [ ] Web-Deployment und PWA-Offline-Verhalten prüfen.
