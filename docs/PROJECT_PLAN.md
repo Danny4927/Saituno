@@ -494,19 +494,20 @@ Zusätzlich sind reale Instrumente und Mikrofone erforderlich. Mindestens eine G
 
 ### Phase 6 – Release-Vorbereitung
 
-**Status: Als nächster Schritt geplant.**
+**Status: Implementierung in PR #10 gebündelt; automatisierte Web-, Android- und iOS-Simulator-Builds sind eingerichtet. Die finale Release-Abnahme bleibt von externen Zugangsdaten und physischen Geräten abhängig.**
 
-- [x] Erste Accessibility-Verbesserungen: semantische Beschriftungen, Tastaturfokus, reduzierte Live-Updates und Kontrastkorrekturen; weitere Screenreader-/WCAG-Prüfung bleibt offen.
-- [ ] Kontrast, Dark-/Light-Mode und responsive Ansichten systematisch abnehmen.
-- [ ] App-Icons, Splashscreens und Metadaten finalisieren.
-- [ ] Web-Deployment und PWA-Offline-Verhalten prüfen.
-- [ ] Reproduzierbare Release-Builds für Android und iOS vorbereiten.
-- [ ] Android-Signierung und Release-Secrets sicher konfigurieren (Keystore nicht einchecken).
-- [ ] Release-Workflow und Versions-/Changelog-Prozess einrichten.
-- [ ] Lizenz- und Third-Party-Hinweise prüfen.
-- [ ] Bekannte Plattform- und Audioeinschränkungen dokumentieren.
+- [x] Erste Accessibility-Verbesserungen: semantische Beschriftungen, Tastaturbedienung, sichtbare Fokuszustände, reduzierte Live-Updates und gezielte Kontrastkorrekturen.
+- [ ] Vollständige WCAG-/Screenreader-Prüfung sowie Kontrastabnahme für alle Ansichten und Zustände.
+- [x] Web-, PWA- und native App-Icons, Splashscreens und Metadaten ergänzt.
+- [ ] Live-Deployment und Offline-Verhalten auf realen Zielgeräten final abnehmen.
+- [x] Reproduzierbare Android-Debug-APK- und iOS-Simulator-Builds in GitHub Actions eingerichtet.
+- [x] Android-Release-Signierung über geschützte Repository-Secrets vorbereitet; Keystore wird nicht eingecheckt.
+- [x] Tag-basierter Release-Workflow, Versionsabgleich und Changelog ergänzt.
+- [x] MIT-Lizenzdatei vorhanden; vollständige Third-Party-Lizenzprüfung vor Veröffentlichung bleibt offen.
+- [x] Bekannte Plattform-, Audio- und Messgrenzen dokumentiert.
+- [ ] Physische Android-/iOS-Abnahme und kalibrierte Pitch-/Latenzmessungen durchführen und protokollieren.
 
-**Abnahme:** Ein reproduzierbarer Release-Kandidat liegt vor; physische Gerätematrix und Audio-Messwerte sind dokumentiert.
+**Abnahme:** Die Repository-Implementierung ist vorbereitet. Eine öffentliche Release-Freigabe erfolgt erst nach erfolgreicher CI, Signierung, Geräteabnahme, Audio-Messung und manueller Accessibility-Prüfung.
 
 ## 13. Nicht Bestandteil des MVP
 
