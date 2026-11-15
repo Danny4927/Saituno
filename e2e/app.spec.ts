@@ -102,6 +102,7 @@ test('persists instrument, tuning and string selection after reload', async ({ p
   await page.reload();
   console.log('SAITUNO_STORAGE_READS:' + JSON.stringify(storageReads));
   console.log('SAITUNO_STORAGE_AFTER_RELOAD:' + await page.evaluate(() => localStorage.getItem('saituno.settings.v1')));
+  console.log('SAITUNO_SELECT_AFTER_RELOAD:' + await page.getByTestId('instrument-select').inputValue());
 
   await expect(page.getByTestId('instrument-select')).toHaveValue('bass');
   await expect(page.getByTestId('tuning-select')).toHaveValue('bass-5-standard');
