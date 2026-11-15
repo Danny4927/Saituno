@@ -122,4 +122,25 @@ describe('SettingsService', () => {
     await restored.load();
     expect(restored.settings()).toEqual(service.settings());
   });
+  it('falls back to WebView localStorage when native Preferences are unavailable', async () => {
+    const saved = {
+      instrumentId: 'bass',
+      tuningId: 'bass-5-standard',
+      selectionMode: 'manual',
+      manualStringId: 'B0'
+    };
+    vi.mocked(Preferences.get).mockRejectedValue(new Error('native bridge unavailable'));
+    vi.stubGlobal('window', {
+      localStorage: {
+        getItem: vi.fn(() => JSON.stringify(saved)),
+        setItem: vi.fn()
+      }
+    });
+
+    const service = new SettingsService();
+    await service.load();
+
+    expect(service.settings()).toEqual(saved);
+  });
+
 });
