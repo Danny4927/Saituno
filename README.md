@@ -97,7 +97,7 @@ No microphone audio is recorded, stored or transmitted. See [docs/audio-engine.m
 - Keep core tuning functionality available offline.
 - Do not add tracking, advertising, monetization or account requirements.
 
-See [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) for the product scope, architecture, phases and acceptance criteria.
+See [docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md) for the product scope, architecture, phases and acceptance criteria. User-visible changes are tracked in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
