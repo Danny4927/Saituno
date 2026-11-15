@@ -35,11 +35,11 @@ import {
               entspannt.
             </p>
           </div>
-          <section class="tuner-card" aria-label="Stimmgerät" data-testid="tuner-panel">
+          <section class="tuner-card" aria-labelledby="tuner-heading" data-testid="tuner-panel">
             <div class="card-header">
               <div>
                 <p class="card-kicker">INSTRUMENT</p>
-                <h2>
+                <h2 id="tuner-heading">
                   {{ activeInstrument().name }}
                   <span class="tuning-name">· {{ activeTuning().name }}</span>
                 </h2>
@@ -111,7 +111,7 @@ import {
               }}</span>
             </div>
 
-            <div class="string-picker" aria-label="Saite auswählen">
+            <div class="string-picker" role="group" aria-label="Saite auswählen">
               @for (string of strings(); track string.id + string.label) {
                 <button
                   type="button"
@@ -120,9 +120,7 @@ import {
                   [class.manual-selected]="
                     selectionMode() === 'manual' && manualStringId() === string.id
                   "
-                  [attr.aria-pressed]="
-                    selectionMode() === 'manual' && manualStringId() === string.id
-                  "
+                  [attr.aria-pressed]="activeString()?.id === string.id"
                   [attr.aria-label]="'Saite ' + string.label + ', ' + string.note + string.octave"
                   (click)="selectString(string.id)"
                   [attr.data-testid]="'string-' + string.id"
@@ -172,7 +170,7 @@ import {
                   ><span>+50 Cent</span>
                 </div>
               </div>
-              <div class="cent-result" aria-live="polite">
+              <div class="cent-result">
                 @if (deviationCents() !== null) {
                   <strong
                     >{{ deviationCents()! > 0 ? '+' : ''
