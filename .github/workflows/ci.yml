@@ -74,8 +74,14 @@ jobs:
       - name: Build production web app
         run: npm run build:production
 
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers and dependencies
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: Start audio server for Firefox
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pulseaudio
+          pulseaudio --start --exit-idle-time=-1
 
       - name: Initialize or verify Playwright visual baseline
         env:
