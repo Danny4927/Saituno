@@ -142,5 +142,4 @@ describe('SettingsService', () => {
 
     expect(service.settings()).toEqual(saved);
   });
-
 });
