@@ -128,3 +128,28 @@ test('pauses microphone processing when the page enters the background', async (
   await expect(page.getByRole('status')).toContainText('Hintergrund');
   await expect(page.getByTestId('tuner-toggle')).toContainText('Mikrofon erneut aktivieren');
 });
+
+
+test('exposes accessible names and selected string state', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByTestId('tuner-panel')).toHaveAttribute('aria-labelledby', 'tuner-heading');
+  await expect(page.getByRole('group', { name: 'Saite auswählen' })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Instrument auswählen' })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Stimmung auswählen' })).toBeVisible();
+  await page.getByTestId('manual-mode').click();
+  await page.getByTestId('string-A2').click();
+  await expect(page.getByTestId('string-A2')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByTestId('string-E2')).toHaveAttribute('aria-pressed', 'false');
+});
+
+test('supports keyboard navigation through tuner controls', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Saituno Startseite' })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('combobox', { name: 'Instrument auswählen' })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('combobox', { name: 'Stimmung auswählen' })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByTestId('auto-mode')).toBeFocused();
+});
