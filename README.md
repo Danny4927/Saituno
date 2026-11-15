@@ -4,7 +4,7 @@
 
 Saituno is an open-source, privacy-first instrument tuner. The application is designed to run locally in the browser or as a native Android/iOS app. There is no backend, account system, analytics, advertising or audio upload.
 
-> **Project status:** Foundation / Phase 1. The current screen is a project shell; microphone access and pitch detection are planned for Phase 2.
+> **Project status:** Phase 2 audio prototype. The browser version can request microphone access and estimate monophonic pitch locally. Accuracy and latency measurements on real instruments and native devices are still pending.
 
 ## Technology
 
@@ -12,7 +12,7 @@ Saituno is an open-source, privacy-first instrument tuner. The application is de
 - Ionic 9.0.11
 - Capacitor 8.6.2
 - TypeScript 6.0.x
-- Angular Service Worker for the PWA foundation
+- Angular Service Worker for offline app assets, including the AudioWorklet processor
 - Vitest for unit tests
 - Playwright for browser end-to-end and screenshot-based visual regression tests
 - GitHub Actions for continuous integration
@@ -59,6 +59,12 @@ Android builds require the Android SDK and a supported JDK/Gradle environment. i
 ## PWA
 
 The web app includes a web manifest and Angular service-worker configuration. The production build registers the service worker; development mode does not. The manifest uses relative start and scope URLs so it can be hosted below a repository path.
+
+## Audio prototype
+
+The microphone is accessed only after the user presses the start button. Audio is processed locally with Web Audio API, AudioWorklet and YIN pitch estimation. The prototype reports the nearest note, octave, frequency and cents relative to A4 = 440 Hz. It currently targets approximately 25–1,500 Hz, including the low B string of a six-string bass.
+
+No microphone audio is recorded, stored or transmitted. See [docs/audio-engine.md](docs/audio-engine.md) for the processing pipeline and known limitations, and [docs/PHASE_2_TEST_MATRIX.md](docs/PHASE_2_TEST_MATRIX.md) for the outstanding real-device validation.
 
 ## Architecture principles
 
