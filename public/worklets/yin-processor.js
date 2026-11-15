@@ -70,9 +70,12 @@ export function estimatePitch(samples, sampleRate, options = {}) {
     if (selectedTau < 0 || bestValue > 0.35) return null;
   }
 
-  const left = normalized[selectedTau - 1] ?? normalized[selectedTau];
-  const center = normalized[selectedTau];
-  const right = normalized[selectedTau + 1] ?? center;
+  // Use the raw difference curve for sub-sample interpolation. The CMND
+  // curve is used for robust period selection, but its cumulative normalization
+  // can skew the parabola around an exact minimum at higher frequencies.
+  const left = differences[selectedTau - 1] ?? differences[selectedTau];
+  const center = differences[selectedTau];
+  const right = differences[selectedTau + 1] ?? center;
   const denominator = left - 2 * center + right;
   const correction =
     Math.abs(denominator) > 1e-12 ? 0.5 * (left - right) / denominator : 0;
