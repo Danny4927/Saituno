@@ -1,6 +1,6 @@
 import { isDevMode } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideIonicAngular } from '@ionic/angular/standalone';
+import { provideIonicAngular } from '@ionic/angular';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
 
