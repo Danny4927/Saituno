@@ -7,10 +7,12 @@ export class AudioService implements OnDestroy {
   private readonly _status = signal<AudioStatus>('idle');
   private readonly _measurement = signal<PitchMeasurement | null>(null);
   private readonly _errorMessage = signal<string | null>(null);
+  private readonly _inputLevel = signal(0);
 
   readonly status = this._status.asReadonly();
   readonly measurement = this._measurement.asReadonly();
   readonly errorMessage = this._errorMessage.asReadonly();
+  readonly inputLevel = this._inputLevel.asReadonly();
 
   private stream: MediaStream | null = null;
   private audioContext: AudioContext | null = null;
@@ -52,6 +54,7 @@ export class AudioService implements OnDestroy {
     this.startInProgress = true;
     this._status.set('requesting');
     this._measurement.set(null);
+    this._inputLevel.set(0);
     this._errorMessage.set(null);
     this.recentFrequencies = [];
     this.receivedWorkletMessage = false;
@@ -156,6 +159,7 @@ export class AudioService implements OnDestroy {
     await this.releaseAudioResources();
     this.recentFrequencies = [];
     this._measurement.set(null);
+    this._inputLevel.set(0);
     this._errorMessage.set(null);
     this._status.set('idle');
   }
@@ -190,7 +194,9 @@ export class AudioService implements OnDestroy {
   }
 
   private handleWorkletMessage(message: WorkletMeasurementMessage): void {
-    if (message.type !== 'measurement' || !message.frequency || message.confidence < 0.65) {
+    if (message.type !== 'measurement') return;
+    this._inputLevel.set(message.rms);
+    if (!message.frequency || message.confidence < 0.65) {
       this._measurement.set(null);
       this.recentFrequencies = [];
       return;

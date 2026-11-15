@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -10,7 +11,11 @@ export default defineConfig({
     baseURL: 'http://127.0.0.1:4200',
     trace: 'retain-on-failure',
     launchOptions: {
-      args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream']
+      args: [
+        '--use-fake-device-for-media-stream',
+        '--use-fake-ui-for-media-stream',
+        `--use-file-for-fake-audio-capture=${resolve(process.cwd(), 'e2e/fixtures/440hz.wav')}`
+      ]
     }
   },
   projects: [

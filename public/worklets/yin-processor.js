@@ -138,11 +138,16 @@ if (typeof AudioWorkletProcessor !== 'undefined') {
             ordered.set(this.buffer.subarray(this.writeIndex), 0);
             ordered.set(this.buffer.subarray(0, this.writeIndex), firstPart);
             const result = estimatePitch(ordered, this.effectiveSampleRate);
+            let inputEnergy = 0;
+            for (let sample = 0; sample < ordered.length; sample += 1) {
+              inputEnergy += ordered[sample] * ordered[sample];
+            }
+            const inputRms = Math.sqrt(inputEnergy / ordered.length);
             this.port.postMessage({
               type: 'measurement',
               frequency: result?.frequency ?? null,
               confidence: result?.confidence ?? 0,
-              rms: result?.rms ?? 0
+              rms: result?.rms ?? inputRms
             });
           }
         }

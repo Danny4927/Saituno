@@ -220,6 +220,7 @@ export class HomePage {
   readonly currentYear = new Date().getFullYear();
   readonly status = this.audio.status;
   readonly measurement = this.audio.measurement;
+  readonly inputLevel = this.audio.inputLevel;
   readonly selectionMode = signal<'auto' | 'manual'>('auto');
   readonly selectedInstrumentId = signal('guitar');
   readonly selectedTuningId = signal('guitar-standard');
@@ -279,7 +280,11 @@ export class HomePage {
       return this.audio.errorMessage() ?? 'Audio konnte nicht gestartet werden.';
     }
     if (!this.isListening()) return 'Aktiviere das Mikrofon, um mit dem Stimmen zu beginnen.';
-    if (!this.measurement()) return 'Ich höre zu – spiele eine einzelne Saite an.';
+    if (!this.measurement()) {
+      return this.inputLevel() < 0.004
+        ? 'Mikrofon aktiv, aber es kommt kaum Audiosignal an. Prüfe den Mikrofonpegel und die Eingangsquelle.'
+        : 'Audiosignal erkannt, aber keine eindeutige Tonhöhe. Spiele eine einzelne Saite sauber an.';
+    }
     if (!this.activeString()) return 'Keine passende Saite erkannt.';
     if (this.tuningStatus() === 'tuned') return 'Perfekt – die Saite ist gestimmt.';
     return this.tuningStatus() === 'flat'
