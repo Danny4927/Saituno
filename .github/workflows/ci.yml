@@ -80,7 +80,8 @@ jobs:
           PR_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
           SNAPSHOT_DIR="e2e/app.spec.ts-snapshots"
-          if [ ! -d "$SNAPSHOT_DIR" ]; then
+          SNAPSHOT_FILE="$SNAPSHOT_DIR/saituno-audio-prototype-chromium-linux.png"
+          if [ ! -f "$SNAPSHOT_FILE" ]; then
             npm run test:e2e -- --update-snapshots
             if [ "$GITHUB_EVENT_NAME" = "push" ] || [ "$PR_HEAD_REPOSITORY" = "$GITHUB_REPOSITORY" ]; then
               git config user.name "github-actions[bot]"
