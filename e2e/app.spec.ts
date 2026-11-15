@@ -73,3 +73,39 @@ test('receives microphone samples through the AudioWorklet', async ({ page, cont
   await expect(page.getByTestId('pitch-readout')).toBeVisible({ timeout: 10_000 });
   await expect(page.locator('.frequency-value')).toContainText(/44[0-9]\.\d Hz/);
 });
+
+
+test('persists instrument, tuning and string selection after reload', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('instrument-select').selectOption('bass');
+  await page.getByTestId('tuning-select').selectOption('bass-5-standard');
+  await page.getByTestId('manual-mode').click();
+  await page.getByTestId('string-B0').click();
+
+  await page.reload();
+
+  await expect(page.getByTestId('instrument-select')).toHaveValue('bass');
+  await expect(page.getByTestId('tuning-select')).toHaveValue('bass-5-standard');
+  await expect(page.getByTestId('manual-mode')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByTestId('string-B0')).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('pauses microphone processing when the page enters the background', async ({ page, context }) => {
+  if (test.info().project.name === 'chromium') {
+    await context.grantPermissions(['microphone']);
+  }
+  await page.goto('/');
+  await page.getByTestId('tuner-toggle').click();
+  await expect(page.getByTestId('tuner-toggle')).toContainText('Stimmgerät stoppen');
+
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      value: 'hidden'
+    });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+
+  await expect(page.getByRole('status')).toContainText('Hintergrund');
+  await expect(page.getByTestId('tuner-toggle')).toContainText('Mikrofon erneut aktivieren');
+});
