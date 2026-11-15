@@ -188,14 +188,14 @@ YIN wird als erster Algorithmus implementiert. Der Algorithmus ist für monophon
 
 | Eigenschaft | Ziel |
 |---|---:|
-| Messbereich | ca. 35–1.500 Hz |
+| Messbereich | ca. 25–1.500 Hz |
 | Anzeigeauflösung | 1 Cent |
 | Zielgenauigkeit | ±2 Cent |
 | Aktualisierung | 20–30 Messungen/s |
 | Reaktionszeit | Ziel unter 150 ms |
 | Stabilisierung | Ziel unter 500 ms |
 
-Diese Werte sind Entwicklungsziele und müssen durch Messungen validiert werden. Tiefe Bassfrequenzen erfordern längere Analysefenster; Genauigkeit und Reaktionsgeschwindigkeit sind abzuwägen. Unterstützung tiefer Frequenzen unterhalb 35 Hz wird anhand des Bass-Anwendungsfalls geprüft.
+Diese Werte sind Entwicklungsziele und müssen durch Messungen validiert werden. Die tiefe H-Saite eines 5-/6-saitigen Basses liegt bei etwa 30,9 Hz und muss daher unterstützt werden. Tiefe Bassfrequenzen erfordern längere Analysefenster; Genauigkeit und Reaktionsgeschwindigkeit sind abzuwägen.
 
 ## 7. UI- und UX-Konzept
 
@@ -438,15 +438,18 @@ Zusätzlich sind reale Instrumente und Mikrofone erforderlich. Mindestens eine G
 
 ### Phase 2 – Audio-Prototyp
 
-- Mikrofonzugriff implementieren.
-- AudioContext und AudioWorklet einrichten.
-- YIN implementieren.
-- Frequenz- und Cent-Berechnung implementieren.
-- Confidence-Bewertung ergänzen.
-- Synthetische Testsignale erzeugen.
-- Auf echten Geräten testen.
+- [x] Mikrofonzugriff über `getUserMedia()` implementieren.
+- [x] AudioContext und AudioWorklet einrichten.
+- [x] YIN implementieren und im Worklet sowie in Vitest gemeinsam verwenden.
+- [x] Frequenz-, Noten- und Cent-Berechnung implementieren.
+- [x] Confidence- und RMS-Bewertung ergänzen.
+- [x] Synthetische Testsignale für Bass, Gitarre und höhere Frequenzen erzeugen.
+- [x] Fehlerzustände für verweigerte Berechtigung und fehlendes Mikrofon ergänzen.
+- [x] Audio-Lifecycle mit Stop, Track-Freigabe und AudioContext-Cleanup implementieren.
+- [x] Erste Tuner-Prototypansicht mit Angular Signals verbinden.
+- [ ] Auf echten Geräten testen und Genauigkeit/Latenz dokumentieren.
 
-**Abnahme:** Einzelne Töne werden auf den unterstützten Plattformen zuverlässig erkannt. Qualitätsziele werden dokumentiert und gemessen.
+**Abnahme:** Noch offen. Die algorithmische und Browser-Grundlage ist implementiert und automatisiert getestet. Die vollständige Abnahme erfordert reale Mikrofon-/Instrumenttests auf Web, Android und iOS.
 
 ### Phase 3 – Tuner-Oberfläche
 
@@ -599,7 +602,7 @@ Der Name ist eine Produktentscheidung für die Entwicklung, keine bestätigte ma
 
 ## 18. Nächster Umsetzungsschritt
 
-Phase 1 ist umgesetzt. Als Nächstes folgt Phase 2: ein kleiner Audio-Prototyp mit reproduzierbaren Testsignalen. Die vollständige Tuner-Oberfläche wird erst ausgebaut, wenn die Audioverarbeitung auf Web, Android und iOS nachweislich funktioniert.
+Phase 1 ist abgeschlossen. Phase 2 hat den Audio-Prototyp mit Mikrofonzugriff, AudioWorklet, YIN, Frequenz-/Cent-Berechnung und automatisierten synthetischen Tests umgesetzt. Vor dem Abschluss von Phase 2 stehen noch reale Gerätetests und die Messung von Genauigkeit und Latenz aus. Danach folgt Phase 3 mit dem Ausbau der eigentlichen Tuner-Oberfläche.
 
 
 ---
@@ -777,3 +780,57 @@ Implementierung auf Branch `phase-1/project-foundation`, Pull Request [#1](https
 ### Bewusste Abgrenzung
 
 Die Startansicht ist aktuell ein UI-Grundgerüst und noch kein nutzbares Stimmgerät. Mikrofonzugriff, AudioWorklet, Pitch Detection und die eigentliche Tuner-Oberfläche gehören zu Phase 2 und den folgenden Phasen. GitHub Pages Deployment und Release-Automatisierung sind ebenfalls noch nicht eingerichtet.
+
+
+---
+
+## 24. Umsetzungsstand Phase 2 – Audio-Prototyp (15.11.2026)
+
+**Status: Implementiert; reale Gerätetests und Messwerte stehen noch aus.**
+
+### Implementiert
+
+- Mikrofonzugriff nach bewusster Nutzeraktion über `getUserMedia()`
+- AudioContext mit interaktiver Latenz
+- AudioWorklet mit Mono-Mix, 4:1-Decimation und überlappendem Analysefenster
+- YIN-Differenzfunktion, CMND, Parabel-Interpolation und Confidence-Ausgabe
+- RMS-Gate für Stille und zu schwache Signale
+- Frequenz-zu-Noten-/Oktav-/Cent-Berechnung auf Basis A4 = 440 Hz
+- Median-Glättung über bis zu fünf Messwerte
+- Angular Signals für Audiozustand und aktuelle Messung; keine Signalupdates pro Sample
+- Stop-/Cleanup-Pfad für AudioNodes, MediaStream-Tracks und AudioContext
+- Berechtigungs-, fehlendes Mikrofon-, unsupported- und Fehlerzustände
+- Erster Live-Audio-Prototyp auf der Startansicht
+
+### Technische Parameter des Prototyps
+
+- Frequenzbereich: 25–1.500 Hz (damit auch tiefe H-Saite um 30,9 Hz erfasst werden kann)
+- 4:1-Decimation; bei 48 kHz Gerätesamplerate wird mit 12 kHz analysiert
+- Analysefenster: 2.048 Samples (ca. 171 ms bei 12 kHz)
+- Hop: 512 Samples (ca. 43 ms; theoretisch ca. 23,4 Updates/s)
+- YIN-Threshold: 0,15
+- Mindest-RMS: 0,004
+
+Die Zeiten sind aus Fenster- und Hop-Größe abgeleitet, keine gemessenen Ende-zu-Ende-Latenzen. Die Werte müssen mit echten Instrumenten und Mikrofonen validiert werden.
+
+### Automatisierte Tests
+
+- Synthetische Frequenzen von tiefer Bass-H-Saite bis 1.500 Hz
+- Mehrere Samplerates
+- Dominante zweite Harmonische
+- Deterministisches Hintergrundrauschen
+- Stille, zu schwaches Signal, ungültige Samplerate und zu kurze Fenster
+- Notenname, Oktave, Cent-Abweichung und Referenzfrequenz
+- Berechtigungsfehler und fehlendes Mikrofon
+- Playwright-Idle-Ansicht mit Visual Regression
+
+### Noch offen
+
+- [ ] Messungen mit echten Instrumenten und kalibrierter Referenz
+- [ ] Chrome, Safari und Firefox
+- [ ] Android Chrome und native Capacitor-App
+- [ ] iOS Safari und native Capacitor-App
+- [ ] Genauigkeit in Cent, erste Reaktionszeit und Stabilisierung dokumentieren
+- [ ] Audio-Unterbrechungen, App-Backgrounding und Gerätewechsel validieren
+
+Die verbindliche Testmatrix steht in `docs/PHASE_2_TEST_MATRIX.md`; technische Details und bekannte Einschränkungen in `docs/audio-engine.md`.
