@@ -118,7 +118,7 @@ h1 span {
 }
 .card-kicker {
   margin: 0 0 5px;
-  color: #7f8a9b;
+  color: #929baa;
 }
 .card-header h2 {
   margin: 0;
@@ -172,7 +172,7 @@ h1 span {
 }
 .mode-hint {
   margin-left: auto;
-  color: #7f8a9b;
+  color: #929baa;
   font-size: 9px;
 }
 .string-picker {
@@ -359,7 +359,7 @@ h1 span {
 }
 .target-frequency {
   margin: 2px 0 0;
-  color: #748091;
+  color: #8793a2;
   font-size: 9px;
 }
 .card-footer {
@@ -389,6 +389,8 @@ h1 span {
   cursor: wait;
   opacity: 0.7;
 }
+.brand:focus-visible,
+.configuration-field select:focus-visible,
 .start-button:focus-visible,
 .mode-button:focus-visible,
 .string-button:focus-visible {
@@ -403,7 +405,7 @@ h1 span {
   line-height: 1.5;
 }
 .footer {
-  color: #6f7a89;
+  color: #8793a2;
   font-size: 8px;
   letter-spacing: 0.12em;
 }
