@@ -217,6 +217,10 @@ import {
   styleUrl: './home.page.scss'
 })
 export class HomePage {
+  constructor() {
+    console.log('SAITUNO_HOME_SETTINGS:' + JSON.stringify(this.settings.settings()));
+  }
+
   private readonly audio = inject(AudioService);
   private readonly settings = inject(SettingsService);
   readonly instruments = INSTRUMENTS;
