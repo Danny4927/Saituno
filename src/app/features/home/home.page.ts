@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { AudioService } from '../../core/audio/audio.service';
+import { SettingsService } from '../../core/settings/settings.service';
 import {
   centsFromTarget,
   closestString,
@@ -215,16 +216,17 @@ import {
 })
 export class HomePage {
   private readonly audio = inject(AudioService);
+  private readonly settings = inject(SettingsService);
   readonly instruments = INSTRUMENTS;
   readonly meterTicks = Array.from({ length: 21 }, (_, index) => (index - 10) * 5);
   readonly currentYear = new Date().getFullYear();
   readonly status = this.audio.status;
   readonly measurement = this.audio.measurement;
   readonly inputLevel = this.audio.inputLevel;
-  readonly selectionMode = signal<'auto' | 'manual'>('auto');
-  readonly selectedInstrumentId = signal('guitar');
-  readonly selectedTuningId = signal('guitar-standard');
-  readonly manualStringId = signal<string | null>(null);
+  readonly selectionMode = computed(() => this.settings.settings().selectionMode);
+  readonly selectedInstrumentId = computed(() => this.settings.settings().instrumentId);
+  readonly selectedTuningId = computed(() => this.settings.settings().tuningId);
+  readonly manualStringId = computed(() => this.settings.settings().manualStringId);
 
   readonly activeInstrument = computed<InstrumentDefinition>(
     () => getInstrument(this.selectedInstrumentId()) ?? INSTRUMENTS[0]!
@@ -305,29 +307,35 @@ export class HomePage {
     const instrumentId = (event.target as HTMLSelectElement).value;
     const instrument = getInstrument(instrumentId);
     if (!instrument) return;
-    this.selectedInstrumentId.set(instrument.id);
-    this.selectedTuningId.set(instrument.defaultTuningId);
-    this.manualStringId.set(instrument.tunings[0]?.strings[0]?.id ?? null);
+    void this.settings.update({
+      instrumentId: instrument.id,
+      tuningId: instrument.defaultTuningId,
+      manualStringId: instrument.tunings[0]?.strings[0]?.id ?? null
+    });
   }
 
   selectTuning(event: Event): void {
     const tuningId = (event.target as HTMLSelectElement).value;
     const tuning = getTuning(this.selectedInstrumentId(), tuningId);
     if (!tuning) return;
-    this.selectedTuningId.set(tuning.id);
-    this.manualStringId.set(tuning.strings[0]?.id ?? null);
+    void this.settings.update({
+      tuningId: tuning.id,
+      manualStringId: tuning.strings[0]?.id ?? null
+    });
   }
 
   setMode(mode: 'auto' | 'manual'): void {
-    this.selectionMode.set(mode);
-    if (mode === 'manual' && !this.manualStringId()) {
-      this.manualStringId.set(this.strings()[0]?.id ?? null);
-    }
+    void this.settings.update({
+      selectionMode: mode,
+      manualStringId:
+        mode === 'manual' && !this.manualStringId()
+          ? (this.strings()[0]?.id ?? null)
+          : this.manualStringId()
+    });
   }
 
   selectString(id: string): void {
-    this.manualStringId.set(id);
-    this.selectionMode.set('manual');
+    void this.settings.update({ manualStringId: id, selectionMode: 'manual' });
   }
 
   toggleAudio(): void {
