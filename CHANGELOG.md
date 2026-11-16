@@ -6,6 +6,8 @@ The format follows Keep a Changelog. Versions follow Semantic Versioning.
 
 ## [0.1.0] - Unreleased
 
+Phase 6 release preparation is implemented. Public release is pending Phase 7 device validation, calibrated audio measurements, manual accessibility/license review and signing setup.
+
 ### Added
 - Browser-based instrument tuner for guitar, ukulele and bass.
 - Local microphone processing with Web Audio API, AudioWorklet and YIN pitch detection.
