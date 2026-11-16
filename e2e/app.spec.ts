@@ -73,9 +73,12 @@ test('receives microphone samples through the AudioWorklet', async ({ page, cont
     await context.grantPermissions(['microphone']);
   }
   await page.goto('/');
+  const readout = page.locator('.pitch-readout');
+  const initialReadoutHeight = (await readout.boundingBox())!.height;
   await page.getByTestId('tuner-toggle').click();
   await expect(page.getByTestId('pitch-readout')).toBeVisible({ timeout: 10_000 });
   await expect(page.locator('.frequency-value')).toContainText(/44[0-9]\.\d Hz/);
+  await expect.poll(async () => (await readout.boundingBox())!.height).toBe(initialReadoutHeight);
 });
 
 
