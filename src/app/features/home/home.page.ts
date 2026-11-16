@@ -184,9 +184,13 @@ import {
               <p class="status-text" role="status" aria-live="polite" data-testid="tuner-status">
                 {{ statusMessage() }}
               </p>
-              @if (activeString()) {
-                <p class="target-frequency">Soll {{ activeString()!.frequency.toFixed(2) }} Hz</p>
-              }
+              <p class="target-frequency" [class.is-placeholder]="!activeString()">
+                @if (activeString()) {
+                  Soll {{ activeString()!.frequency.toFixed(2) }} Hz
+                } @else {
+                  &nbsp;
+                }
+              </p>
             </div>
 
             <div class="card-footer">
