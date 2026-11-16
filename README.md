@@ -4,7 +4,7 @@
 
 Saituno is an open-source, privacy-first instrument tuner. The application is designed to run locally in the browser or as a native Android/iOS app. There is no backend, account system, analytics, advertising or audio upload.
 
-> **Project status (15 November 2026):** Phases 1–5 are implemented and merged. Phase 6 release preparation is in progress. Physical-device validation (Android/iOS), calibrated accuracy/latency measurements and release hardening remain open. See the [Phase 5 platform validation](docs/phase-5-platform-integration.md) and [Phase 6 release checklist](docs/PHASE_6_RELEASE_CHECKLIST.md).
+> **Project status (16 November 2026):** Phases 1–6 are implemented and merged. CI, GitHub Pages deployment and Android/iOS native build workflows pass on `main`. Real-device validation, calibrated pitch/latency measurements, manual accessibility review and release signing remain open. These are tracked as Phase 7 in [the project plan](docs/PROJECT_PLAN.md) and [the release checklist](docs/PHASE_6_RELEASE_CHECKLIST.md). Saituno is not yet declared production-release-ready.
 
 ## Technology
 
