@@ -185,9 +185,7 @@ import {
                 {{ statusMessage() }}
               </p>
               @if (activeString()) {
-                <p class="target-frequency">
-                  Soll {{ activeString()!.frequency.toFixed(2) }} Hz
-                </p>
+                <p class="target-frequency">Soll {{ activeString()!.frequency.toFixed(2) }} Hz</p>
               }
             </div>
 
