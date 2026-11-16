@@ -3,7 +3,7 @@
 **Produkt:** Saituno  
 **Untertitel:** Open Source Instrument Tuner  
 **Zielplattformen:** Web, Android und iOS  
-**Projektstatus (15.11.2026):** Phasen 1–5 gemerged; Phase 6 Implementierung im PR #10, Geräte- und Release-Abnahme offen
+**Projektstatus (16.11.2026):** Phasen 1–6 implementiert und gemerged; automatisierte Web-/Native-Builds erfolgreich. Geräte-, Kalibrierungs- und öffentliche Release-Abnahme sind als Phase 7 offen.
 
 ---
 
@@ -903,8 +903,50 @@ Die verbindliche Testmatrix steht in `docs/PHASE_2_TEST_MATRIX.md`; technische D
 
 ## 27. Phase 6 – Release-Vorbereitung
 
-Die Implementierung wird in einem zusammenhängenden Pull Request gepflegt. Der PR ergänzt Accessibility-Verbesserungen, reproduzierbare native Build-Prüfungen, Android-Release-Signierung und GitHub-Release-Automatisierung sowie PWA-/Native-Metadaten. Die Details und verbleibenden Abnahmepunkte stehen in `docs/PHASE_6_RELEASE_CHECKLIST.md`.
+**Status: implementiert und gemerged (PR #10); automatisierte CI-, Pages- und Native-Builds auf `main` erfolgreich.**
+
+Die Implementierung wurde in einem zusammenhängenden Pull Request geliefert. Der PR ergänzt Accessibility-Verbesserungen, reproduzierbare native Build-Prüfungen, Android-Release-Signierung und GitHub-Release-Automatisierung sowie PWA-/Native-Metadaten. Die Details und verbleibenden Abnahmepunkte stehen in `docs/PHASE_6_RELEASE_CHECKLIST.md`.
 
 Automatisiert werden ein Android-Debug-APK-Build und ein iOS-Simulator-Build ausgeführt. Ein versionsgebundener Git-Tag (`vX.Y.Z`) kann eine signierte Android-APK inklusive SHA-256-Prüfsumme veröffentlichen, sofern alle vier Android-Keystore-Secrets konfiguriert sind. iOS-Store-Distribution benötigt weiterhin Apple-Zertifikate, Provisioning Profiles und Account-Zugang.
 
 Die folgenden Punkte bleiben bewusst externe Abnahmen: physische Android-/iOS-Geräte, kalibrierte Pitch- und Latenzmessungen, vollständige Screenreader-/WCAG-Review, Android-Keystore-Konfiguration und Apple-Distribution. Kein Dokument oder Release darf diese Tests als durchgeführt ausweisen, bevor Nachweise vorliegen.
+
+
+---
+
+## 28. Phase 7 – Gerätevalidierung und Release Candidate
+
+**Status: geplant; externe Geräte und Release-Zugangsdaten erforderlich.**
+
+Phase 7 schließt die Lücke zwischen erfolgreicher Repository-CI und einer belastbaren Produktfreigabe. Sie führt keine neuen Produktfunktionen ein, bevor Audioqualität und Plattformverhalten auf realen Geräten nachgewiesen sind.
+
+### 7.1 Reproduzierbare Geräte- und Audioabnahme
+
+- [ ] Testmatrix für Chrome, Firefox und Safari sowie Android Chrome/Capacitor und iOS Safari/Capacitor mit Gerät, Betriebssystem, Browser/WebView und Datum ausfüllen.
+- [ ] Mikrofon-Erlauben, Ablehnen und nachträgliches Entziehen prüfen.
+- [ ] App-/Tab-Wechsel, Sperrbildschirm, Audio-Fokus-Unterbrechung und erneute Aktivierung prüfen.
+- [ ] Offline-Start nach vorherigem Laden auf Web und nativen Apps nachweisen.
+- [ ] Gitarre, Ukulele und Bass mit kalibrierter Referenz testen; Frequenzfehler in Cent, Zeit bis zur ersten Anzeige und Stabilisierung dokumentieren.
+- [ ] Messungen für tiefe Bassfrequenzen (einschließlich B0) und leise/ausklingende Saiten separat festhalten.
+
+**Abnahmekriterium:** Keine Plattform wird als unterstützt oder release-ready bezeichnet, bevor die zugehörige Testmatrix mit nachvollziehbaren Ergebnissen ausgefüllt ist. Die Ziele ±2 Cent und unter 150 ms gelten nur bei gemessenem Nachweis.
+
+### 7.2 Accessibility und Release-Hygiene
+
+- [ ] Tastaturbedienung und Screenreader manuell in mindestens einem Desktop- und einem mobilen Kontext prüfen.
+- [ ] Kontrast in Light/Dark Mode gegen WCAG 2.2 AA überprüfen; Status darf nicht nur über Farbe erkennbar sein.
+- [ ] Reduced Motion und alle Berechtigungs-/Fehlerzustände manuell prüfen.
+- [ ] MIT-Lizenz und Drittanbieter-Lizenzhinweise vollständig reviewen.
+- [ ] Marken-, Domain- und Store-Namen separat prüfen; keine rechtliche Freigabe aus dem Projektnamen ableiten.
+
+### 7.3 Internal Release Candidate
+
+- [ ] Android-Keystore erzeugen und sicher offline sichern; die vier dokumentierten GitHub Secrets konfigurieren.
+- [ ] Versionsnummer in `package.json`, Tag und Release-Assets synchronisieren.
+- [ ] Versionstag erstellen und signierte APK mit `apksigner` verifizieren.
+- [ ] SHA-256-Prüfsumme gegen die heruntergeladene APK prüfen.
+- [ ] APK auf physischem Android-Gerät installieren und Smoke-Test protokollieren.
+- [ ] iOS-Simulator-Build prüfen; TestFlight erst nach Bereitstellung von Apple-Zertifikaten/Provisioning einrichten.
+- [ ] Release Notes mit bestätigten Plattformen und bekannten Einschränkungen veröffentlichen.
+
+**Abnahmekriterium:** Zunächst interner/beta Release Candidate. Öffentliche Freigabe erst, wenn alle verpflichtenden Geräte-, Audio-, Accessibility-, Lizenz- und Signierungs-Gates nachgewiesen sind.
