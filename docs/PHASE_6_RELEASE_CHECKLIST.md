@@ -1,10 +1,14 @@
-# Phase 6 – Release preparation checklist
+# Saituno – Release readiness checklist
 
 This checklist separates automated repository checks from manual platform acceptance. A green CI run is not proof of physical microphone accuracy or native-device behavior.
 
-## 1. Current baseline (15 November 2026)
+## 1. Current baseline (16 November 2026)
 
-- [x] Phases 1–5 merged into `main`.
+- [x] Phases 1–6 are implemented and merged into `main` (Phase 6: PR #10).
+- [x] Latest `main` verification: CI, GitHub Pages deployment and Android/iOS native builds all succeeded (commit `19daeb01c825c9ba1ca24e83f8ad72f35515e0ac`).
+- [ ] Public release remains blocked by the Phase 7 gates below.
+
+- [x] Phases 1–6 merged into `main`.
 - [x] Angular production build and automated unit tests are part of CI.
 - [x] Playwright E2E coverage runs in Chromium and Firefox.
 - [x] GitHub Pages deployment workflow exists.
@@ -78,7 +82,17 @@ Use a signal generator or calibrated reference. A phone speaker alone is not a s
 - [x] Release workflow is tag-only and uses `contents: write`; signing secrets are required before publishing.
 - [ ] Brand, domain and store-name availability are reviewed separately; the project name is not a trademark clearance.
 
-## 7. Release decision
+## 7. Phase 7 – execution order
+
+1. Complete real-device permission, lifecycle, offline and microphone checks.
+2. Record calibrated pitch error and end-to-end response/stabilization measurements for guitar, ukulele and bass.
+3. Complete manual accessibility, contrast, reduced-motion and license review.
+4. Configure and back up Android signing credentials; validate the signed APK and checksum.
+5. Produce an explicitly labelled internal/beta release candidate, then decide on public release only after all mandatory gates pass.
+
+Required GitHub Actions secrets: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` and `ANDROID_KEY_PASSWORD`. Never commit the keystore or credentials.
+
+## 8. Release decision
 
 Release readiness is **blocked** while mandatory physical device checks, calibrated audio measurements, signing setup or critical accessibility/security issues remain open. Automated CI success is necessary but not sufficient.
 
