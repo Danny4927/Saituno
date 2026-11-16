@@ -216,6 +216,7 @@ h1 span {
   box-shadow: inset 0 0 0 1px #c2f279;
 }
 .pitch-readout {
+  position: relative;
   margin-top: 20px;
   padding: 19px 14px 14px;
   border-radius: 16px;
@@ -358,14 +359,14 @@ h1 span {
   line-height: 1.5;
 }
 .target-frequency {
-  min-height: 11px;
-  margin: 2px 0 0;
+  position: absolute;
+  right: 14px;
+  bottom: 2px;
+  left: 14px;
+  margin: 0;
   color: #8793a2;
   font-size: 9px;
   line-height: 11px;
-}
-.target-frequency.is-placeholder {
-  visibility: hidden;
 }
 .card-footer {
   margin-top: 18px;
