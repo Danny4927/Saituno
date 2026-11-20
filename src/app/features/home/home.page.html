@@ -38,12 +38,9 @@
               (change)="selectInstrument($event)"
             >
               @for (instrument of instruments; track instrument.id) {
-                <option
-                  [value]="instrument.id"
-                  [selected]="instrument.id === selectedInstrumentId()"
-                >
-                  {{ instrument.name }}
-                </option>
+              <option [value]="instrument.id" [selected]="instrument.id === selectedInstrumentId()">
+                {{ instrument.name }}
+              </option>
               }
             </select>
           </label>
@@ -55,9 +52,9 @@
               (change)="selectTuning($event)"
             >
               @for (tuning of availableTunings(); track tuning.id) {
-                <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">
-                  {{ tuning.name }}
-                </option>
+              <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">
+                {{ tuning.name }}
+              </option>
               }
             </select>
           </label>
@@ -84,31 +81,30 @@
           >
             MANUELL
           </button>
-          <span class="mode-hint">{{
-            selectionMode() === 'auto'
-              ? 'Saite wird automatisch erkannt'
-              : 'Saite manuell auswählen'
-          }}</span>
+          <span class="mode-hint"
+            >{{ selectionMode() === 'auto' ? 'Saite wird automatisch erkannt' : 'Saite manuell
+            auswählen' }}</span
+          >
         </div>
 
         <div class="string-picker" role="group" aria-label="Saite auswählen">
           @for (string of strings(); track string.id + string.label) {
-            <button
-              type="button"
-              class="string-button"
-              [class.selected]="activeString()?.id === string.id"
-              [class.manual-selected]="
+          <button
+            type="button"
+            class="string-button"
+            [class.selected]="activeString()?.id === string.id"
+            [class.manual-selected]="
                 selectionMode() === 'manual' && manualStringId() === string.id
               "
-              [attr.aria-pressed]="activeString()?.id === string.id"
-              [attr.aria-label]="'Saite ' + string.label + ', ' + string.note + string.octave"
-              (click)="selectString(string.id)"
-              [attr.data-testid]="'string-' + string.id"
-            >
-              <span class="string-number">{{ string.label }}</span>
-              <strong>{{ string.note }}</strong>
-              <small>{{ string.octave }}</small>
-            </button>
+            [attr.aria-pressed]="activeString()?.id === string.id"
+            [attr.aria-label]="'Saite ' + string.label + ', ' + string.note + string.octave"
+            (click)="selectString(string.id)"
+            [attr.data-testid]="'string-' + string.id"
+          >
+            <span class="string-number">{{ string.label }}</span>
+            <strong>{{ string.note }}</strong>
+            <small>{{ string.octave }}</small>
+          </button>
           }
         </div>
 
@@ -123,25 +119,23 @@
           <div class="note-value">
             <span>{{ activeString() ? activeString()!.note : '—' }}</span>
             @if (activeString()) {
-              <sup>{{ activeString()!.octave }}</sup>
+            <sup>{{ activeString()!.octave }}</sup>
             }
           </div>
           <p class="frequency-value">
-            {{
-              measurement() ? measurement()!.frequency.toFixed(1) + ' Hz' : 'Warte auf Signal'
-            }}
+            {{ measurement() ? measurement()!.frequency.toFixed(1) + ' Hz' : 'Warte auf Signal' }}
           </p>
           <div class="tuning-meter" role="img" [attr.aria-label]="meterDescription()">
             <div class="meter-track">
               <span class="meter-zone left"></span><span class="meter-zone center"></span>
               <span class="meter-zone right"></span>
               @for (tick of meterTicks; track tick) {
-                <span
-                  class="meter-tick"
-                  [class.major]="tick % 10 === 0"
-                  [class.center-tick]="tick === 0"
-                  [style.left.%]="50 + tick"
-                ></span>
+              <span
+                class="meter-tick"
+                [class.major]="tick % 10 === 0"
+                [class.center-tick]="tick === 0"
+                [style.left.%]="50 + tick"
+              ></span>
               }
               <span class="meter-needle" [style.left.%]="needlePosition()"></span>
             </div>
@@ -152,20 +146,19 @@
           </div>
           <div class="cent-result">
             @if (deviationCents() !== null) {
-              <strong
-                >{{ deviationCents()! > 0 ? '+' : ''
-                }}{{ deviationCents()!.toFixed(0) }}</strong
-              >
-              <span>Cent</span>
+            <strong
+              >{{ deviationCents()! > 0 ? '+' : '' }}{{ deviationCents()!.toFixed(0) }}</strong
+            >
+            <span>Cent</span>
             } @else {
-              <strong>—</strong><span>Cent</span>
+            <strong>—</strong><span>Cent</span>
             }
           </div>
           <p class="status-text" role="status" aria-live="polite" data-testid="tuner-status">
             {{ statusMessage() }}
           </p>
           @if (activeString()) {
-            <p class="target-frequency">Soll {{ activeString()!.frequency.toFixed(2) }} Hz</p>
+          <p class="target-frequency">Soll {{ activeString()!.frequency.toFixed(2) }} Hz</p>
           }
         </div>
 
@@ -177,15 +170,10 @@
             [disabled]="status() === 'requesting'"
             (click)="toggleAudio()"
           >
-            @if (status() === 'requesting') {
-              Mikrofon wird gestartet …
-            } @else if (isListening()) {
-              <span class="stop-icon">■</span> Stimmgerät stoppen
-            } @else if (status() === 'paused' || status() === 'suspended') {
-              <span class="mic-icon">◉</span> Mikrofon erneut aktivieren
-            } @else {
-              <span class="mic-icon">◉</span> Mikrofon aktivieren
-            }
+            @if (status() === 'requesting') { Mikrofon wird gestartet … } @else if (isListening()) {
+            <span class="stop-icon">■</span> Stimmgerät stoppen } @else if (status() === 'paused' ||
+            status() === 'suspended') { <span class="mic-icon">◉</span> Mikrofon erneut aktivieren }
+            @else { <span class="mic-icon">◉</span> Mikrofon aktivieren }
           </button>
           <p>Dein Audio bleibt auf diesem Gerät. Keine Aufnahme, kein Upload.</p>
         </div>
