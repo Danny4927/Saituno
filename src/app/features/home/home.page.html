@@ -4,85 +4,85 @@
       <a class="brand" href="./" aria-label="Saituno Startseite">
         <span class="brand-mark" aria-hidden="true">S</span><span>Saituno</span>
       </a>
-    <span class="privacy-label"><span class="privacy-dot"></span> LOKAL & PRIVAT</span>
-  </header>
-<section class="tuner-layout" aria-labelledby="page-title">
-  <div class="intro">
-    <p class="eyebrow">DEIN INSTRUMENT. DEIN SOUND.</p>
-    <h1 id="page-title">Stimm dein<br /><span>Instrument.</span></h1>
-    <p class="intro-copy">
-      Präzise Rückmeldung in Echtzeit. Schlage eine Saite einzeln an und stimme sie ganz
-      entspannt.
-    </p>
-</div>
-<section class="tuner-card" aria-labelledby="tuner-heading" data-testid="tuner-panel">
-  <div class="card-header">
-    <div>
-      <p class="card-kicker">INSTRUMENT</p>
-      <h2 id="tuner-heading">
-        {{ activeInstrument().name }}
-        <span class="tuning-name">· {{ activeTuning().name }}</span>
-      </h2>
+      <span class="privacy-label"><span class="privacy-dot"></span> LOKAL & PRIVAT</span>
+    </header>
+    <section class="tuner-layout" aria-labelledby="page-title">
+      <div class="intro">
+        <p class="eyebrow">DEIN INSTRUMENT. DEIN SOUND.</p>
+        <h1 id="page-title">Stimm dein<br /><span>Instrument.</span></h1>
+        <p class="intro-copy">
+          Präzise Rückmeldung in Echtzeit. Schlage eine Saite einzeln an und stimme sie ganz
+          entspannt.
+        </p>
+      </div>
+      <section class="tuner-card" aria-labelledby="tuner-heading" data-testid="tuner-panel">
+        <div class="card-header">
+          <div>
+            <p class="card-kicker">INSTRUMENT</p>
+            <h2 id="tuner-heading">
+              {{ activeInstrument().name }}
+              <span class="tuning-name">· {{ activeTuning().name }}</span>
+            </h2>
+          </div>
+          <span class="live-indicator" [class.is-live]="isListening()">
+            <span></span>{{ isListening() ? 'LIVE' : 'BEREIT' }}
+          </span>
+        </div>
+
+        <div class="configuration-row">
+          <label class="configuration-field">
+            <span>Instrument</span>
+            <select
+            aria-label="Instrument auswählen"
+            data-testid="instrument-select"
+            (change)="selectInstrument($event)"
+            >
+            @for (instrument of instruments; track instrument.id) {
+            <option
+            [value]="instrument.id"
+            [selected]="instrument.id === selectedInstrumentId()"
+            >
+            {{ instrument.name }}
+          </option>
+          }
+        </select>
+      </label>
+      <label class="configuration-field">
+        <span>Stimmung</span>
+        <select
+        aria-label="Stimmung auswählen"
+        data-testid="tuning-select"
+        (change)="selectTuning($event)"
+        >
+        @for (tuning of availableTunings(); track tuning.id) {
+        <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">
+          {{ tuning.name }}
+        </option>
+        }
+      </select>
+    </label>
   </div>
-<span class="live-indicator" [class.is-live]="isListening()">
-  <span></span>{{ isListening() ? 'LIVE' : 'BEREIT' }}
-</span>
-</div>
 
-<div class="configuration-row">
-  <label class="configuration-field">
-    <span>Instrument</span>
-    <select
-    aria-label="Instrument auswählen"
-    data-testid="instrument-select"
-    (change)="selectInstrument($event)"
+  <div class="mode-row" aria-label="Saitenauswahl">
+    <button
+    type="button"
+    class="mode-button"
+    [class.active]="selectionMode() === 'auto'"
+    [attr.aria-pressed]="selectionMode() === 'auto'"
+    (click)="setMode('auto')"
+    data-testid="auto-mode"
     >
-    @for (instrument of instruments; track instrument.id) {
-    <option
-    [value]="instrument.id"
-    [selected]="instrument.id === selectedInstrumentId()"
-    >
-    {{ instrument.name }}
-  </option>
-}
-</select>
-</label>
-<label class="configuration-field">
-  <span>Stimmung</span>
-  <select
-  aria-label="Stimmung auswählen"
-  data-testid="tuning-select"
-  (change)="selectTuning($event)"
-  >
-  @for (tuning of availableTunings(); track tuning.id) {
-  <option [value]="tuning.id" [selected]="tuning.id === selectedTuningId()">
-    {{ tuning.name }}
-  </option>
-}
-</select>
-</label>
-</div>
-
-<div class="mode-row" aria-label="Saitenauswahl">
+    AUTO
+  </button>
   <button
   type="button"
   class="mode-button"
-  [class.active]="selectionMode() === 'auto'"
-  [attr.aria-pressed]="selectionMode() === 'auto'"
-  (click)="setMode('auto')"
-  data-testid="auto-mode"
+  [class.active]="selectionMode() === 'manual'"
+  [attr.aria-pressed]="selectionMode() === 'manual'"
+  (click)="setMode('manual')"
+  data-testid="manual-mode"
   >
-  AUTO
-</button>
-<button
-type="button"
-class="mode-button"
-[class.active]="selectionMode() === 'manual'"
-[attr.aria-pressed]="selectionMode() === 'manual'"
-(click)="setMode('manual')"
-data-testid="manual-mode"
->
-MANUELL
+  MANUELL
 </button>
 <span class="mode-hint">{{
   selectionMode() === 'auto'
