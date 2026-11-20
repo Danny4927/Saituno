@@ -1,4 +1,4 @@
-import { inject, isDevMode, provideAppInitializer } from '@angular/core';
+import { inject, isDevMode, provideAppInitializer, provideZonelessChangeDetection } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideIonicAngular } from '@ionic/angular';
 import { provideRouter, withHashLocation } from '@angular/router';
@@ -7,6 +7,7 @@ import { routes } from './app.routes';
 
 export const appConfig = {
   providers: [
+    provideZonelessChangeDetection(),
     provideIonicAngular(),
     provideRouter(routes, withHashLocation()),
     provideAppInitializer(() => inject(SettingsService).load()),
