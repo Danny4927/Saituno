@@ -22,7 +22,7 @@ User gesture
   -> Angular Signals -> prototype view
 ```
 
-The worklet runs outside Angular. It sends at most one result per 512 decimated samples. At a 48 kHz device sample rate the worklet analyzes at 12 kHz and sends approximately 23.4 updates per second. Angular signals are updated only when these analysis messages arrive, never for individual audio samples.
+The application uses Angular's zoneless change detection (`provideZonelessChangeDetection`). The worklet runs outside Angular. Its message callback updates Signals, which notify Angular to render the latest state without Zone.js. It sends at most one result per 512 decimated samples. At a 48 kHz device sample rate the worklet analyzes at 12 kHz and sends approximately 23.4 updates per second. Angular signals are updated only when these analysis messages arrive, never for individual audio samples.
 
 The initial 2,048-sample window represents about 171 ms at 12 kHz. That is a deliberate trade-off for low bass frequencies; the first valid estimate therefore cannot be expected before the initial window has filled. The 512-sample hop gives subsequent updates roughly every 43 ms. These are design-derived timings, not measured end-to-end latency claims.
 
