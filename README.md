@@ -8,7 +8,7 @@ Saituno is an open-source, privacy-first instrument tuner. The application is de
 
 ## Technology
 
-- Angular 22.2.6 with standalone components and Angular Signals
+- Angular 22.2.6 with standalone components, external HTML templates, Angular Signals and zoneless change detection
 - Ionic 9.0.11
 - Capacitor 8.6.2
 - TypeScript 6.0.x
@@ -91,7 +91,9 @@ No microphone audio is recorded, stored or transmitted. See [docs/audio-engine.m
 ## Architecture principles
 
 - Keep domain logic independent from Angular, Ionic and Capacitor.
-- Use Angular Signals for application and UI state.
+- Use Angular Signals for application and UI state; keep change detection zoneless.
+- Keep component HTML in dedicated `.html` template files (`templateUrl`); do not add inline component templates.
+- In zoneless components, async callbacks that change UI state must update Signals or use another Angular-supported notification mechanism.
 - Keep audio processing outside Angular's UI update loop.
 - Do not transmit or persist microphone audio.
 - Keep core tuning functionality available offline.
