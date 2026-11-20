@@ -17,6 +17,7 @@ Phase 6 release preparation is implemented. Public release is pending Phase 7 de
 - Tag-triggered Android APK release workflow with protected signing and SHA-256 checksum.
 
 ### Improved
+- Moved component HTML into dedicated external template files and enabled Angular zoneless change detection.
 - Keyboard navigation, visible focus, tuner labels and screen-reader announcements.
 - App metadata, PWA icon declaration and native app version consistency.
 
